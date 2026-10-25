@@ -1,0 +1,188 @@
+date,weekday,start,end,hours,title,type,prep_hours,stress
+2026-08-25,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-08-25,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-08-25,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-08-26,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-08-26,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-08-27,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-08-27,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-08-27,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-08-28,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-08-28,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-08-31,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-08-31,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-09-01,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-09-01,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-09-01,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-09-02,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-02,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-09-03,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-09-03,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-09-03,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-09-04,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-04,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-09-08,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-09-08,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-09-08,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-09-09,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-09,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-09-10,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-09-10,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-09-10,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-09-11,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-11,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-09-11,Fri,19:00,21:30,2.5,Trivia night,other,0.0,1
+2026-09-14,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-14,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-09-15,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-09-15,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-09-15,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-09-16,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-16,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-09-17,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-09-17,Thu,13:00,13:30,0.5,SPAN 202 Quiz 1,quiz,2.0,4
+2026-09-17,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-09-17,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-09-18,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-18,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-09-21,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-21,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-09-22,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-09-22,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-09-22,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-09-23,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-23,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-09-24,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-09-24,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-09-24,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-09-25,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-25,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-09-26,Sat,11:00,15:00,4.0,Museum trip with friends,other,0.0,1
+2026-09-28,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-28,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-09-29,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-09-29,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-09-29,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-09-30,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-09-30,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-10-01,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-10-01,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-10-01,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-10-02,Fri,all day,,0.0,PHIL 110 Paper 1 due,deadline,6.0,7
+2026-10-02,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-02,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-10-05,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-05,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-10-06,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-10-06,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-10-06,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-10-07,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-07,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-10-08,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-10-08,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-10-08,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-10-09,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-09,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-10-11,Sun,11:00,13:00,2.0,Sorority brunch,other,0.0,1
+2026-10-13,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-10-14,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-14,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-10-15,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-10-15,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-10-15,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-10-16,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-16,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-10-19,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-19,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-10-20,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-10-20,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-10-20,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-10-21,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-21,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-10-22,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-10-22,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-10-22,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-10-23,Fri,all day,,0.0,ENGL 230 essay due,deadline,6.0,7
+2026-10-23,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-23,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-10-24,Sat,20:00,23:59,3.98,Fall formal,other,0.0,1
+2026-10-26,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-26,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-10-27,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-10-27,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-10-27,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-10-28,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-28,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-10-29,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-10-29,Thu,13:00,13:30,0.5,SPAN 202 Quiz 2,quiz,2.0,4
+2026-10-29,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-10-29,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-10-30,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-10-30,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-11-02,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-11-02,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-11-03,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-11-03,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-11-03,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-11-04,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-11-04,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-11-05,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-11-05,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-11-05,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-11-06,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-11-06,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-11-09,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-11-09,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-11-09,Mon,19:00,21:30,2.5,Moot court prep with team,other,0.0,1
+2026-11-10,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-11-10,Tue,13:00,15:00,2.0,ENGL 230 Midterm,exam,10.0,9
+2026-11-10,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-11-10,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-11-11,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-11-11,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-11-11,Wed,18:00,20:00,2.0,POLS 201 Midterm,exam,10.0,9
+2026-11-12,Thu,all day,,0.0,PHIL 110 Paper 2 due,deadline,6.0,7
+2026-11-12,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-11-12,Thu,13:00,14:00,1.0,SPAN 202 Oral exam,exam,10.0,9
+2026-11-12,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-11-12,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-11-13,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-11-13,Fri,14:00,17:00,3.0,Moot court oral argument,other,0.0,1
+2026-11-13,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-11-16,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-11-16,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-11-17,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-11-17,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-11-17,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-11-18,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-11-18,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-11-19,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-11-19,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-11-19,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-11-20,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-11-20,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-11-21,Sat,17:00,21:00,4.0,Friendsgiving,other,0.0,1
+2026-11-23,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-11-23,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-11-24,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-11-24,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-11-30,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-11-30,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-12-01,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-12-01,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-12-01,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-12-02,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-12-02,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-12-03,Thu,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-12-03,Thu,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-12-03,Thu,20:00,21:30,1.5,Poetry open mic,other,0.0,1
+2026-12-04,Fri,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-12-04,Fri,15:00,18:00,3.0,Legal aid clinic volunteering,other,0.0,1
+2026-12-05,Sat,19:30,21:30,2.0,Winter concert,other,0.0,1
+2026-12-07,Mon,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-12-07,Mon,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1
+2026-12-08,Tue,09:30,10:45,1.25,POLS 201 Constitutional Law,other,0.0,1
+2026-12-08,Tue,13:00,13:50,0.83,SPAN 202 Intermediate Spanish,other,0.0,1
+2026-12-08,Tue,18:30,20:00,1.5,Debate club,other,0.0,1
+2026-12-09,Wed,10:00,10:50,0.83,PHIL 110 Logic,other,0.0,1
+2026-12-09,Wed,13:00,14:15,1.25,ENGL 230 American Literature,other,0.0,1

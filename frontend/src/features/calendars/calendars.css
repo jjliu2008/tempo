@@ -517,3 +517,30 @@
     box-shadow: 4px 4px 0 #73352e;
   }
 }
+.calendar-login-demos {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border);
+}
+.calendar-page .calendar-login-demos h2 {
+  margin: 0 0 12px;
+  font-size: 0.9375rem;
+}
+.calendar-login-demos ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.calendar-login-demos li {
+  display: grid;
+  gap: 2px;
+}
+.calendar-login-demos a {
+  font-weight: 600;
+}
+.calendar-login-demos li span {
+  color: var(--calendar-muted);
+  font-size: 0.875rem;
+}

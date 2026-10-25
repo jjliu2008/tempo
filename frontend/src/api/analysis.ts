@@ -12,6 +12,8 @@ export type InputEvent = {
 /** Exactly one source. The URL is a password: it only travels in this body. */
 export type CalendarAnalyzeRequest = {
   source: "demo" | "ics" | "url" | "events";
+  /** Which fictional semester `source: "demo"` loads; default engineering. */
+  demo?: "engineering" | "social-crunch" | "work-crunch" | "humanities";
   ics?: string;
   url?: string;
   events?: InputEvent[];

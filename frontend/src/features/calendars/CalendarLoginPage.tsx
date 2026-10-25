@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Apple, CalendarDays, Link2, Loader2, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+import { DEMO_ACCOUNTS } from "../heat-map/demo-accounts.mjs";
 import AppleConnectForm from "./AppleConnectForm";
 import { useCalendars } from "./useCalendars";
 import "./calendars.css";
@@ -112,9 +113,17 @@ export default function CalendarLoginPage() {
             connection credentials are encrypted on the server.
           </span>
         </p>
-        <a className="calendar-login-demo" href="/schedule?demo">
-          Use the demo account
-        </a>
+        <div className="calendar-login-demos">
+          <h2>Or open a demo account</h2>
+          <ul>
+            {DEMO_ACCOUNTS.map((demo) => (
+              <li key={demo.id}>
+                <a href={`/schedule?demo=${demo.id}`}>{demo.name}</a>
+                <span>{demo.blurb}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
     </main>
   );

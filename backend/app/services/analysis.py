@@ -41,9 +41,9 @@ class CalendarRequestError(Exception):
     """A bad request. Messages are safe to show and never include the URL."""
 
 
-@lru_cache(maxsize=1)
-def demo_ics() -> bytes:
-    data: bytes = build_calendar().to_ical()
+@lru_cache(maxsize=8)
+def demo_ics(variant: str = "engineering") -> bytes:
+    data: bytes = build_calendar(variant).to_ical()
     return data
 
 
@@ -84,7 +84,7 @@ def parsed_events(
 
 def load_calendar(request: CalendarAnalyzeRequest) -> icalendar.Calendar:
     if request.source == "demo":
-        return parse_ics(demo_ics(), "demo calendar")
+        return parse_ics(demo_ics(request.demo), "demo calendar")
     if request.source == "ics":
         if not request.ics or not request.ics.strip():
             raise CalendarRequestError("Upload an .ics file.")

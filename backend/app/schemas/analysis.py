@@ -29,6 +29,8 @@ class CalendarAnalyzeRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     source: Literal["demo", "ics", "url", "events"]
+    # Which fictional semester `source: demo` loads; ignored for other sources.
+    demo: Literal["engineering", "social-crunch", "work-crunch", "humanities"] = "engineering"
     ics: str | None = None
     url: str | None = None
     events: list[InputEvent] | None = None

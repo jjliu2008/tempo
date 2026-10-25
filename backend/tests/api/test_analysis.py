@@ -74,6 +74,41 @@ async def test_demo_semester_finds_week_9(client: httpx.AsyncClient) -> None:
     assert data["events"] and data["prep_blocks"]
 
 
+DEMO_HELL_WEEKS = {
+    "engineering": ("2026-10-15", "2026-10-23"),
+    "social-crunch": ("2026-10-15", "2026-10-26"),
+    "work-crunch": ("2026-10-22", "2026-11-02"),
+    "humanities": ("2026-11-05", "2026-11-15"),
+}
+
+
+@pytest.mark.parametrize("variant", sorted(DEMO_HELL_WEEKS))
+async def test_each_demo_semester_has_its_own_hell_week(
+    client: httpx.AsyncClient, variant: str
+) -> None:
+    response = await analyze(client, source="demo", demo=variant, gemma=False)
+    assert response.status_code == 200
+    (week,) = response.json()["hell_weeks"]
+    assert (week["start"], week["end"]) == DEMO_HELL_WEEKS[variant]
+
+
+async def test_social_demo_is_busier_and_more_social_than_the_default(
+    client: httpx.AsyncClient,
+) -> None:
+    async def titles(variant: str) -> list[str]:
+        data = (await analyze(client, source="demo", demo=variant, gemma=False)).json()
+        return [e["title"] for e in data["events"]]
+
+    default, social = await titles("engineering"), await titles("social-crunch")
+    assert len(social) > len(default)
+    assert {"Greek formal", "Football tailgate", "Karaoke night"} <= set(social) - set(default)
+
+
+async def test_unknown_demo_semester_is_rejected(client: httpx.AsyncClient) -> None:
+    response = await analyze(client, source="demo", demo="astronomy")
+    assert response.status_code == 422
+
+
 async def test_uploaded_ics(client: httpx.AsyncClient) -> None:
     response = await analyze(
         client,

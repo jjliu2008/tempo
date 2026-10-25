@@ -196,12 +196,135 @@ def week_9() -> list[icalendar.Event]:
     ]
 
 
-def build_calendar() -> icalendar.Calendar:
+DEMO_VARIANTS = {
+    "engineering": "Demo Fall 2026: engineering crunch (fictional)",
+    "social-crunch": "Demo Fall 2026: busy and social (fictional)",
+    "work-crunch": "Demo Fall 2026: busy and working (fictional)",
+    "humanities": "Demo Fall 2026: reading and writing heavy (fictional)",
+}
+
+
+def social_crunch_extras() -> list[icalendar.Event]:
+    """The same busy semester, with a full social calendar pulling at week 9."""
+    return [
+        weekly("intramural", "Intramural soccer", ["TU"], (18, 0), (19, 30), "Rec Fields"),
+        weekly("dance", "Dance team practice", ["TH"], (19, 30), (21, 0), "Studio B"),
+        weekly("fri-night", "Friday night out with friends", ["FR"], (21, 0), (23, 59)),
+        weekly("brunch", "Sunday brunch crew", ["SU"], (11, 0), (13, 0), "Dining Court"),
+        timed("soc-karaoke", "Karaoke night", WEEK_9_START + timedelta(days=1), (21, 30), (23, 30)),
+        timed("soc-concert2", "Concert with roommates", date(2026, 10, 22), (19, 0), (22, 0)),
+        timed("soc-formal", "Greek formal", date(2026, 10, 23), (20, 0), (23, 59)),
+        timed("soc-tailgate", "Football tailgate", date(2026, 10, 24), (11, 0), (16, 0)),
+        timed("soc-rave", "Lights out dance party", date(2026, 11, 14), (21, 0), (23, 59)),
+        timed("soc-friendsgiving", "Friendsgiving potluck", date(2026, 11, 21), (17, 0), (21, 0)),
+    ]
+
+
+def work_crunch_extras() -> list[icalendar.Event]:
+    """Part-time job shifts, and a hell week that lands a week after week 9."""
+    week = date(2026, 10, 26)
+    day = [week + timedelta(days=i) for i in range(7)]
+    return [
+        weekly("bookstore", "Bookstore shift", ["TU", "TH"], (16, 30), (21, 0), "Campus Bookstore"),
+        weekly("tutoring", "Tutoring center shift", ["MO"], (17, 0), (19, 0), "Library 2F"),
+        timed("cs-sync2", "CS 220 team sync", day[0], (20, 30), (22, 0), "Library room 4B"),
+        timed("cs-midterm", "CS 220 Midterm", day[1], (19, 0), (21, 0), "Engineering 120"),
+        timed("math-midterm2", "MATH 241 Midterm", day[2], (16, 0), (18, 0), "Math Building 214"),
+        timed("hist-midterm2", "HIST 105 Midterm", day[3], (14, 0), (15, 15), "Humanities 3"),
+        all_day("chem-lab", "CHEM 210 Lab report due", day[4]),
+        timed(
+            "extra-shift",
+            "Extra shift covering a coworker",
+            day[5],
+            (18, 0),
+            (22, 0),
+            "Bean There Cafe",
+        ),
+    ]
+
+
+def humanities_events() -> list[icalendar.Event]:
+    """A different student: reading and writing heavy, with its own hell week (Nov 9-15)."""
+    week = date(2026, 11, 9)
+    day = [week + timedelta(days=i) for i in range(7)]
+    return [
+        weekly(
+            "pols201",
+            "POLS 201 Constitutional Law",
+            ["TU", "TH"],
+            (9, 30),
+            (10, 45),
+            "Law Hall 210",
+        ),
+        weekly(
+            "engl230",
+            "ENGL 230 American Literature",
+            ["MO", "WE"],
+            (13, 0),
+            (14, 15),
+            "Humanities 3",
+        ),
+        weekly("phil110", "PHIL 110 Logic", ["MO", "WE", "FR"], (10, 0), (10, 50), "Philosophy 12"),
+        weekly(
+            "span202",
+            "SPAN 202 Intermediate Spanish",
+            ["TU", "TH"],
+            (13, 0),
+            (13, 50),
+            "Languages 5",
+        ),
+        weekly(
+            "debate", "Debate club", ["TU"], (18, 30), (20, 0), "Union 3", skip=[date(2026, 11, 24)]
+        ),
+        weekly(
+            "clinic", "Legal aid clinic volunteering", ["FR"], (15, 0), (18, 0), "Downtown clinic"
+        ),
+        weekly("openmic", "Poetry open mic", ["TH"], (20, 0), (21, 30), "Campus Coffeehouse"),
+        timed("soc-trivia", "Trivia night", date(2026, 9, 11), (19, 0), (21, 30)),
+        timed("soc-museum", "Museum trip with friends", date(2026, 9, 26), (11, 0), (15, 0)),
+        timed("soc-brunch", "Sorority brunch", date(2026, 10, 11), (11, 0), (13, 0)),
+        timed("soc-formal2", "Fall formal", date(2026, 10, 24), (20, 0), (23, 59)),
+        timed("soc-friendsgiving2", "Friendsgiving", date(2026, 11, 21), (17, 0), (21, 0)),
+        timed("soc-concert3", "Winter concert", date(2026, 12, 5), (19, 30), (21, 30)),
+        all_day("phil-paper1", "PHIL 110 Paper 1 due", date(2026, 10, 2)),
+        all_day("engl-essay", "ENGL 230 essay due", date(2026, 10, 23)),
+        timed("span-quiz1", "SPAN 202 Quiz 1", date(2026, 9, 17), (13, 0), (13, 30), "Languages 5"),
+        timed(
+            "span-quiz2", "SPAN 202 Quiz 2", date(2026, 10, 29), (13, 0), (13, 30), "Languages 5"
+        ),
+        timed("moot-prep", "Moot court prep with team", day[0], (19, 0), (21, 30), "Law Hall 105"),
+        timed("engl-midterm", "ENGL 230 Midterm", day[1], (13, 0), (15, 0), "Humanities 3"),
+        timed("pols-midterm", "POLS 201 Midterm", day[2], (18, 0), (20, 0), "Law Hall 210"),
+        all_day("phil-paper2", "PHIL 110 Paper 2 due", day[3]),
+        timed("span-oral", "SPAN 202 Oral exam", day[3], (13, 0), (14, 0), "Languages 5"),
+        timed(
+            "moot-argument",
+            "Moot court oral argument",
+            day[4],
+            (14, 0),
+            (17, 0),
+            "Law Hall Courtroom",
+        ),
+    ]
+
+
+def build_calendar(variant: str = "engineering") -> icalendar.Calendar:
+    if variant not in DEMO_VARIANTS:
+        raise ValueError(f"Unknown demo variant: {variant}")
     cal = icalendar.Calendar()
     cal.add("prodid", "-//Hell Week Detector//demo semester//EN")
     cal.add("version", "2.0")
-    cal.add("x-wr-calname", "Demo Fall 2026 (fictional)")
-    for ev in recurring_events() + social_events() + quizzes() + milestones() + week_9():
+    cal.add("x-wr-calname", DEMO_VARIANTS[variant])
+    shared = recurring_events() + social_events() + quizzes()
+    if variant == "engineering":
+        events = shared + milestones() + week_9()
+    elif variant == "social-crunch":
+        events = shared + milestones() + week_9() + social_crunch_extras()
+    elif variant == "work-crunch":
+        events = shared + work_crunch_extras()
+    else:
+        events = humanities_events()
+    for ev in events:
         cal.add_component(ev)
     cal.add_missing_timezones()
     return cal
@@ -210,9 +333,10 @@ def build_calendar() -> icalendar.Calendar:
 def main(argv: Sequence[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--out", type=Path, default=Path("demo_semester.ics"))
+    parser.add_argument("--variant", choices=sorted(DEMO_VARIANTS), default="engineering")
     args = parser.parse_args(argv)
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_bytes(build_calendar().to_ical())
+    args.out.write_bytes(build_calendar(args.variant).to_ical())
     print(f"wrote {args.out}")
 
 
