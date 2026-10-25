@@ -1,0 +1,113 @@
+/*
+ * Motion for the calendar connect and events pages. Additive: it only adds
+ * transitions and entrances to the existing .calendar-* classes, so it never
+ * conflicts with edits to calendars.css or the pages. Imported from
+ * src/main.tsx; remove that line to turn it off.
+ *
+ * Frequency gate: connecting and viewing events is occasional, so entrances
+ * are short (under 300ms). Transform/opacity only (translate/scale).
+ * --ease-out is the shared token from heat-map/motion.css.
+ */
+.calendar-page button,
+.calendar-page select,
+.calendar-page input,
+.calendar-page a {
+  transition:
+    scale 160ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)),
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    opacity 150ms ease;
+}
+
+/* Feedback: a press scales down; disabled buttons stay still. */
+.calendar-page button:active:not(:disabled) {
+  scale: 0.97;
+}
+
+/* Page entrance: login content rises in sequence, then everything is still. */
+@keyframes calendar-rise {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@keyframes calendar-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.calendar-login > * {
+  animation: calendar-rise 300ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1))
+    backwards;
+}
+.calendar-login > :nth-child(2) { animation-delay: 50ms; }
+.calendar-login > :nth-child(3) { animation-delay: 100ms; }
+.calendar-login > :nth-child(4) { animation-delay: 150ms; }
+.calendar-login > :nth-child(n + 5) { animation-delay: 200ms; }
+
+.calendar-heading,
+.calendar-section {
+  animation: calendar-rise 300ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1))
+    backwards;
+}
+.calendar-section:nth-of-type(2) { animation-delay: 50ms; }
+.calendar-section:nth-of-type(n + 3) { animation-delay: 100ms; }
+
+/* State indication: errors and status messages appear instead of popping in. */
+.calendar-message {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity 200ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)),
+    translate 200ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));
+
+  @starting-style {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+
+/* Events: the first rows arrive with a light stagger, long lists do not. */
+.calendar-page tbody tr {
+  animation: calendar-fade 250ms ease backwards;
+}
+.calendar-page tbody tr:nth-child(2) { animation-delay: 30ms; }
+.calendar-page tbody tr:nth-child(3) { animation-delay: 60ms; }
+.calendar-page tbody tr:nth-child(4) { animation-delay: 90ms; }
+.calendar-page tbody tr:nth-child(n + 5) { animation-delay: 120ms; }
+
+/* Details expand without the content snapping into place. */
+.calendar-page details[open] > :not(summary) {
+  animation: calendar-fade 200ms ease;
+}
+
+/* Hover only where hover exists; touch fires false hovers on tap. */
+@media (hover: none) {
+  .calendar-page button:hover:not(:disabled),
+  .calendar-page button.calendar-secondary:hover:not(:disabled) {
+    transition-duration: 0ms;
+  }
+}
+
+/* Reduced motion: keep fades, drop movement. */
+@media (prefers-reduced-motion: reduce) {
+  .calendar-login > *,
+  .calendar-heading,
+  .calendar-section {
+    animation-name: calendar-fade;
+    animation-duration: 200ms;
+    animation-delay: 0ms;
+  }
+
+  .calendar-message {
+    translate: none;
+    transition: opacity 150ms ease;
+  }
+
+  .calendar-page button:active:not(:disabled) {
+    scale: none;
+  }
+}

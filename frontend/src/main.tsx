@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
 import { router } from "./routes";
+import "./features/calendars/motion.css";
 
 
 const rootElement = document.getElementById("root");
