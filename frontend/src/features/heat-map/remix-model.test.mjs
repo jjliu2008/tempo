@@ -59,12 +59,6 @@ test('both independent controls shape the goal Gemma is given',()=>{
  assert.equal(mixKey({effort:'lazy',social:'introvert'}),'lazy-introvert');
 });
 
-test('advice keeps only text for events that were asked about',()=>{
- assert.deepEqual(parseAdvice({advice:{mid:' Lock in. ',ghost:'x',party:'',study:7}},week),{mid:'Lock in.'});
- assert.deepEqual(parseAdvice(null,week),{});
- assert.deepEqual(parseAdvice({advice:['a']},week),{});
- assert.equal(adviceRequest(week).context.events.length,3);
-});
 
 test('Gemma replies parse with or without a Markdown fence',()=>{
  assert.deepEqual(parseReply('```json\n{"a":1}\n```'),{a:1});
@@ -75,4 +69,37 @@ test('Gemma replies parse with or without a Markdown fence',()=>{
 test('scheduled hours never show float noise',()=>{
  assert.equal(scheduledHours([{start:0,end:.1},{start:0,end:.2}]),.3);
  assert.equal(scheduledHours([{start:10,end:10+1/3},{start:12,end:12+1/3}]),.67);
+});
+
+test('skips and lock-ins always lead with the plain words, even if Gemma forgot them',()=>{
+ const plan=parseRemixPlan({remove:[{id:'party',detail:'nobody will miss it'}],change:[{id:'study',priority:3,detail:'the exam is Friday'}]},week);
+ const {changes}=applyRemixPlan(week,plan,{effort:'grind',social:'introvert'});
+ assert.equal(changes.find(c=>c.kind==='removed').detail,'Skip: nobody will miss it');
+ assert.equal(changes.find(c=>c.kind==='changed').detail,'Lock in: the exam is Friday');
+ const kept=applyRemixPlan(week,parseRemixPlan({remove:[{id:'party',detail:'Skip: already clear'}]},week),{effort:'lazy',social:'introvert'}).changes[0].detail;
+ assert.equal(kept,'Skip: already clear');
+});
+
+test('the chosen mix reaches both the remix and the hover advice',()=>{
+ const mix={effort:'lazy',social:'introvert'};
+ assert.match(adviceRequest(week,null,mix).system_prompt,/lighter week/);
+ assert.doesNotMatch(adviceRequest(week,null,null).system_prompt,/lighter week/);
+});
+
+test('advice carries a verdict per event, and a non-negotiable event can never be a skip',()=>{
+ const found=parseAdvice({advice:{mid:{verdict:'skip',line:'Tempting, but no'},party:{verdict:'skip',line:'Nobody needs this'},study:{verdict:'maybe',line:'x'}}},week);
+ assert.deepEqual(found,{mid:{verdict:'lock',text:'Tempting, but no'},party:{verdict:'skip',text:'Nobody needs this'}});
+});
+
+test('a lazy remix can never end longer than the original week',()=>{
+ const busy=[...week,{id:'x1',day:4,start:9,end:11,type:'Classes',title:'Seminar',priority:1},{id:'x2',day:5,start:9,end:11,type:'Classes',title:'Optional lab',priority:1}];
+ const greedy=parseRemixPlan({remove:[{id:'x1',detail:'Skip it'}],add:[{day:0,start:8,end:11,title:'Recovery',type:'Me time'},{day:1,start:14,end:17,title:'Nap',type:'Me time'},{day:2,start:18,end:21,title:'Quiet night',type:'Me time'}]},busy);
+ for(const effort of ['lazy','balanced','grind']){
+  const {events}=applyRemixPlan(busy,greedy,{effort,social:'balanced'});
+  const delta=scheduledHours(events)-scheduledHours(busy);
+  if(effort==='lazy')assert.ok(delta<0,`lazy changed hours by ${delta}`);
+  if(effort==='balanced')assert.ok(delta<=2);
+ }
+ const added=applyRemixPlan(busy,greedy,{effort:'lazy',social:'balanced'}).changes.filter(c=>c.kind==='added');
+ assert.deepEqual(added,[],'lazy only skips, it never adds');
 });

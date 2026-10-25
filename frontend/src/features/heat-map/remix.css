@@ -4,3 +4,7 @@
 @media(prefers-reduced-motion:no-preference){.ai-status{animation:tempo-fade 200ms ease backwards}}
 
 .week-jump{display:flex;align-items:center;gap:6px;font-size:12px;color:#a26850}.week-jump input{font:inherit;padding:6px 8px;border:1px solid #deb9a1;border-radius:6px;background:#fff9f4;color:#6b3b30;min-height:32px}.week-note{flex-basis:100%;font-size:12px;color:#8a352f;background:#fbe4da;border-radius:6px;padding:6px 10px}
+
+.verdict{font-size:10px;letter-spacing:.8px;padding:2px 6px;border-radius:4px;margin-right:4px;font-weight:700}.verdict-skip{background:#e8e0dc;color:#5b4a43}.verdict-go{background:#ffe6a8;color:#6b4e00}.verdict-lock{background:#b72b39;color:#fff1e5}
+.cell-verdict{display:inline-block!important;font-size:7px!important;letter-spacing:.7px;padding:2px 3px;border-radius:3px;line-height:1;margin-bottom:3px;font-weight:700}
+.heat-cell .cell-verdict.verdict-skip{background:#ffffffb0;color:#5b4a43}.heat-cell .cell-verdict.verdict-lock{background:#ffffffe0;color:#a91f35}

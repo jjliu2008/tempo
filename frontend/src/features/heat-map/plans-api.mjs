@@ -15,7 +15,7 @@ export async function fetchRemixPlan(mode, events, social, signal) {
   return plan;
 }
 
-/** {event id: advice} for the events Gemma answered. */
-export async function fetchAdvice(events, social, signal) {
-  return parseAdvice(await ask(adviceRequest(events, social), signal), events);
+/** {event id: {verdict, text}} for the events Gemma answered; `mix` is the chosen remix, or null for the original week. */
+export async function fetchAdvice(events, social, mix, signal) {
+  return parseAdvice(await ask(adviceRequest(events, social, mix), signal), events);
 }
