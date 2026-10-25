@@ -447,3 +447,73 @@
     margin-bottom: 32px;
   }
 }
+
+/* Login enhancements: card surface matching the heat-map modal, week motif, icons. */
+.calendar-login {
+  max-width: 480px;
+  padding: 40px;
+  border: 1px solid #e3c5b2;
+  border-radius: 15px;
+  background: #fffaf4;
+  box-shadow: 7px 7px 0 #73352e;
+}
+.calendar-page .calendar-login-brand {
+  margin-bottom: 24px;
+}
+.calendar-login-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-bottom: 28px;
+}
+.calendar-login-day {
+  height: 10px;
+  border-radius: 3px;
+}
+.calendar-login h1 {
+  padding-top: 0;
+  border-top: 0;
+}
+.calendar-login-actions > button,
+.calendar-login-link,
+.calendar-login .calendar-login-privacy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.calendar-login-actions > button {
+  justify-content: center;
+}
+.calendar-login-link {
+  margin-top: 24px;
+}
+.calendar-login .calendar-login-privacy {
+  align-items: flex-start;
+}
+.calendar-login-privacy > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--calendar-accent);
+}
+.calendar-login-demo {
+  display: inline-block;
+}
+.calendar-spin {
+  animation: calendar-spin 900ms linear infinite;
+}
+@keyframes calendar-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .calendar-spin {
+    animation: none;
+  }
+}
+@media (max-width: 680px) {
+  .calendar-login {
+    padding: 28px 22px;
+    box-shadow: 4px 4px 0 #73352e;
+  }
+}
