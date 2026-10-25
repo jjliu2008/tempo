@@ -71,3 +71,8 @@ test('Gemma replies parse with or without a Markdown fence',()=>{
  assert.deepEqual(parseReply('{"a":1}'),{a:1});
  assert.throws(()=>parseReply('sure!'));
 });
+
+test('scheduled hours never show float noise',()=>{
+ assert.equal(scheduledHours([{start:0,end:.1},{start:0,end:.2}]),.3);
+ assert.equal(scheduledHours([{start:10,end:10+1/3},{start:12,end:12+1/3}]),.67);
+});
