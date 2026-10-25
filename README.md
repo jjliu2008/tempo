@@ -13,6 +13,8 @@ event-specific excuses. It is a React/TypeScript SPA backed by FastAPI.
 - Optional user direction such as “texting my professor”
 - Server-side Gemma 4 integration through the Gemini API
 - Calendar parsing and deterministic workload calculations
+- Google Calendar, iCloud, `.ics`, and secret iCal URL import flows
+- End-to-end workload analysis with prep blocks and hell-week forecasts
 
 ```
 .
@@ -93,15 +95,50 @@ touch unrelated folders.
 
 Requires Python 3.11+ and Node 20+.
 
+Run every root-level `make` command from the repository's `app/` directory:
+
 ```bash
+cd /path/to/Hacktober/app
 make install          # creates backend/.venv and installs npm packages
 
 cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env.local
+```
 
-make dev-backend      # http://localhost:8000  (docs at /docs)
+Add `GOOGLE_API_KEY` to `backend/.env` to enable Gemma features. Calendar OAuth
+also requires the provider and encryption variables documented in
+`backend/.env.example`; `.ics` file and secret iCal URL imports do not require
+Google OAuth.
+
+Start the two services in separate terminals:
+
+```bash
+# Terminal 1, from Hacktober/app
+make dev-backend      # http://localhost:8000 (API docs at /docs)
+
+# Terminal 2, from Hacktober/app
 make dev-frontend     # http://localhost:5173
 ```
+
+Open `http://localhost:5173`. The landing page connects or imports a calendar;
+`/calendars` manages providers and `/schedule` displays the heat map.
+
+### Updating an existing checkout
+
+Stop both development servers, then update code and dependencies from
+`Hacktober/app`:
+
+```bash
+git pull --rebase origin main
+uv pip install --python backend/.venv/bin/python -e 'backend[dev]'
+cd frontend && pnpm install && cd ..
+```
+
+Restart both services afterward. A `ModuleNotFoundError` immediately after a
+pull usually means a teammate added a backend dependency and the virtual
+environment needs the `uv pip install` command above. If `make` reports “No
+rule to make target,” verify that the current directory is `Hacktober/app`, not
+its parent.
 
 Vite proxies `/api` to `localhost:8000`, so the browser stays on one origin in
 development and `VITE_API_BASE_URL` can stay relative. In production, set it to
