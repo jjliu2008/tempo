@@ -111,7 +111,7 @@ python -m hellweek analyze CAL.ics --start 2026-08-25 --end 2026-12-15 \
     [--classifications classes.json] [--tz America/New_York] [--hell-hours 50] --out load.json
 ```
 
-`CAL.ics` may also be an http(s) or `webcal://` URL. `--tz` defaults to the
+`CAL.ics` may also be an http(s) or `webcal://` URL (see below). `--tz` defaults to the
 calendar's own timezone, then UTC; `--out` defaults to stdout. Warnings
 (malformed or unmatched `classes.json` entries) go to stderr.
 
@@ -125,6 +125,27 @@ calendar's own timezone, then UTC; `--out` defaults to stdout. Warnings
   (`peak_start`/`peak_end`/`peak_hours`) and its stress >= 7 `key_events`.
 
 Its tests live in `backend/tests/hellweek/` and run with `make test-backend`.
+
+### Importing from a calendar URL
+
+Google: Settings → your calendar → Integrate calendar → **Secret address in
+iCal format**. Apple: share the calendar publicly and use its `webcal://` link.
+`webcal://` is fetched as `https://`, and plain `http://` is upgraded to
+`https://` too. The fetch has a 30 s timeout and parses the result like a file.
+It is a one-time import each time it runs, not a live sync.
+
+**The secret address is a password.** Anyone who has it can read the whole
+calendar. Never log it, print it, put it in a URL query string or commit it.
+
+- CLI: don't type it on the command line, where it lands in shell history.
+  Leave the calendar argument out and the CLI prompts for it with hidden input,
+  or reads `HELLWEEK_CALENDAR_URL`. Errors about it never echo the URL.
+- Backend/frontend: send it in a POST body, never as `?url=`. Uvicorn's access
+  log records query strings. Don't log request bodies, and don't keep it in
+  `localStorage` or the database. Fetch, analyze, then drop it.
+- School Google accounts (MSU and others) sometimes have the secret address
+  turned off by the admin. If it isn't shown, use a personal account, or export
+  the calendar to `.ics` and pass the file.
 
 ## Conventions
 

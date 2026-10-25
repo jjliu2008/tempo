@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import getpass
 import json
+import os
 import sys
 from collections.abc import Sequence
 from datetime import date
@@ -15,7 +17,16 @@ from hellweek.classify import Classification, classify_events, read_classificati
 from hellweek.detect import DEFAULT_HELL_HOURS, detect_hell_weeks
 from hellweek.load import compute_daily_load
 from hellweek.output import load_json
-from hellweek.parse import Event, calendar_timezone, expand_events, read_calendar
+from hellweek.parse import (
+    CalendarSourceError,
+    Event,
+    calendar_timezone,
+    expand_events,
+    looks_like_url,
+    read_calendar,
+)
+
+URL_ENV_VAR = "HELLWEEK_CALENDAR_URL"
 
 
 def warn(message: str) -> None:
@@ -34,7 +45,14 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
 
     common = argparse.ArgumentParser(add_help=False)
-    common.add_argument("calendar", help=".ics file path or http(s)/webcal URL")
+    common.add_argument(
+        "calendar",
+        nargs="?",
+        help=(
+            f".ics file path or http(s)/webcal URL. Private URLs are passwords: leave this "
+            f"out to read ${URL_ENV_VAR} or be prompted, so the URL stays out of shell history"
+        ),
+    )
     common.add_argument("--start", type=iso_date, required=True)
     common.add_argument("--end", type=iso_date, required=True)
     common.add_argument(
@@ -50,7 +68,20 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def calendar_source(arg: str | None) -> str:
+    """The positional argument, else the env var, else a hidden prompt."""
+    if arg:
+        return arg
+    from_env = os.environ.get(URL_ENV_VAR, "").strip()
+    if from_env:
+        return from_env
+    if sys.stdin.isatty():
+        return getpass.getpass("Paste the calendar's secret iCal address (hidden): ").strip()
+    raise CalendarSourceError(f"no calendar given: pass a path, or set {URL_ENV_VAR}")
+
+
 def load_events(args: argparse.Namespace) -> tuple[list[Event], str]:
+    args.calendar = calendar_source(args.calendar)
     cal = read_calendar(args.calendar)
     tz_name = args.tz or calendar_timezone(cal)
     if tz_name is None:
@@ -101,10 +132,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error("--start must be on or before --end")
     try:
         run(args)
-    except FileNotFoundError as exc:
-        parser.error(f"file not found: {exc.filename}")
+    except CalendarSourceError as exc:
+        parser.error(str(exc))
     except ZoneInfoNotFoundError:
         parser.error(f"unknown timezone: {args.tz}")
-    except (ValueError, OSError) as exc:
+    except OSError as exc:
+        if exc.filename is not None and looks_like_url(str(exc.filename)):
+            # Never echo it: it may be a secret address with a mangled https:// prefix.
+            parser.error("could not read the calendar; URLs must start with https:// or webcal://")
+        if isinstance(exc, FileNotFoundError):
+            parser.error(f"file not found: {exc.filename}")
+        parser.error(str(exc))
+    except ValueError as exc:
         parser.error(str(exc))
     return 0

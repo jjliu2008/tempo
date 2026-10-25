@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import http.client
+import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, time, timedelta
@@ -13,6 +16,9 @@ import recurring_ical_events  # type: ignore[import-untyped]
 import x_wr_timezone  # type: ignore[import-untyped]
 
 DEFAULT_DURATION = timedelta(hours=1)
+URL_SCHEMES = ("http://", "https://", "webcal://", "webcals://")
+FETCH_TIMEOUT_SECONDS = 30
+MAX_CALENDAR_BYTES = 20 * 1024 * 1024
 
 
 @dataclass(frozen=True)
@@ -39,16 +45,65 @@ class Event:
         }
 
 
+class CalendarSourceError(Exception):
+    """Could not load the calendar. Messages never include the URL: a private
+    iCal address lets anyone read the whole calendar, so it is a password."""
+
+
+def is_url(text: str) -> bool:
+    return text.strip().lower().startswith(URL_SCHEMES)
+
+
+def looks_like_url(text: str) -> bool:
+    """Catch URLs pasted without a scheme, so errors don't echo them as paths."""
+    lowered = text.lower()
+    return is_url(text) or "://" in lowered or "/ical/" in lowered or "private-" in lowered
+
+
+def fetch_url(text: str) -> str:
+    """webcal(s):// becomes https://, and plain http:// is upgraded too, except
+    for localhost, so the secret never crosses the network unencrypted."""
+    parts = urllib.parse.urlsplit(text.strip())
+    scheme = parts.scheme.lower()
+    local = parts.hostname in ("localhost", "127.0.0.1", "::1")
+    if scheme in ("webcal", "webcals") or (scheme == "http" and not local):
+        scheme = "https"
+    return urllib.parse.urlunsplit(parts._replace(scheme=scheme))
+
+
+def fetch_calendar(text: str, timeout: float = FETCH_TIMEOUT_SECONDS) -> bytes:
+    # `from None` keeps the original exception, which carries the URL, out of tracebacks.
+    try:
+        with urllib.request.urlopen(fetch_url(text), timeout=timeout) as resp:
+            data: bytes = resp.read(MAX_CALENDAR_BYTES + 1)
+    except urllib.error.HTTPError as exc:
+        hint = " (the address may be mistyped or was reset)" if exc.code in (401, 403, 404) else ""
+        raise CalendarSourceError(f"calendar URL returned HTTP {exc.code}{hint}") from None
+    except (OSError, ValueError, http.client.HTTPException) as exc:
+        raise CalendarSourceError(f"could not fetch calendar URL ({type(exc).__name__})") from None
+    if len(data) > MAX_CALENDAR_BYTES:
+        raise CalendarSourceError("calendar URL returned more than 20 MB")
+    return data
+
+
+def parse_ics(data: bytes, what: str) -> icalendar.Calendar:
+    if not data.lstrip(b"\xef\xbb\xbf \t\r\n").startswith(b"BEGIN:VCALENDAR"):
+        raise CalendarSourceError(
+            f"{what} is not an iCalendar file; for Google use the "
+            "'Secret address in iCal format', not the public or embed link"
+        )
+    try:
+        return icalendar.Calendar.from_ical(data)
+    except ValueError as exc:
+        raise CalendarSourceError(f"{what} could not be parsed: {exc}") from None
+
+
 def read_calendar(source: str | Path) -> icalendar.Calendar:
-    """Load a calendar from a file path or an http(s)/webcal URL."""
+    """Load a calendar from a file path or an http(s)/webcal URL (one fetch, no sync)."""
     text = str(source)
-    if text.startswith(("http://", "https://", "webcal://")):
-        url = "https://" + text[len("webcal://") :] if text.startswith("webcal://") else text
-        with urllib.request.urlopen(url, timeout=30) as resp:
-            data = resp.read()
-    else:
-        data = Path(source).read_bytes()
-    return icalendar.Calendar.from_ical(data)
+    if is_url(text):
+        return parse_ics(fetch_calendar(text), "calendar URL")
+    return parse_ics(Path(source).read_bytes(), "calendar file")
 
 
 def fill_missing_ends(cal: icalendar.Calendar) -> icalendar.Calendar:
