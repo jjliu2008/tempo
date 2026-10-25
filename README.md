@@ -1,7 +1,18 @@
-# React + Python App
+# Tempo — Hell Week Detector
 
-Monorepo with a React/TypeScript SPA and a FastAPI service. The two halves are
-independent deployables that share only an HTTP contract.
+Tempo turns a Google Calendar into a daily or weekly workload heat map, calls
+out when the user is officially cooked, and uses Gemma 4 to write ridiculous
+event-specific excuses. It is a React/TypeScript SPA backed by FastAPI.
+
+## Features
+
+- Daily and weekly calendar-density heat maps
+- Gen Z-style workload commentary
+- Event-level excuse generation with professional, casual, dramatic, and
+  unhinged tones
+- Optional user direction such as “texting my professor”
+- Server-side Gemma 4 integration through the Gemini API
+- Calendar parsing and deterministic workload calculations
 
 ```
 .
@@ -123,6 +134,54 @@ state sit beside it in `graphify-out/.graphify_watch/`.
 `make watch-graph-once` runs one check. Stop a background watcher with
 `kill "$(cat graphify-out/.graphify_watch/watch.pid)"`. `INTERVAL`, `REMOTE`,
 `BRANCH`, `REPO_DIR`, and `GRAPHIFY_BIN` are environment overrides.
+
+## Gemma excuse generator
+
+Select an event in the heat map to open **Need an out?**. Pick a professional,
+casual, dramatic, or unhinged vibe, optionally add context such as “texting my
+professor,” then generate and copy a playful excuse.
+
+The feature uses the shared `gemma.generate()` frontend client and
+`POST /api/v1/gemma/generate`; it does not create a second Google SDK client or
+expose the key to the browser. The heat-map calculations remain deterministic
+application code. Gemma writes only the human-facing excuse.
+
+Copy the example environment file and add the shared key to `backend/.env`:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+Use `GOOGLE_API_KEY` or its supported alias, `GEMINI_API_KEY`. Event metadata
+and optional user direction are supplied as application context. The feature
+requests and validates JSON containing `subject`, `excuse`, and `disclaimer`.
+Its system prompt rejects serious medical, legal, criminal, and emergency
+fabrications and treats calendar text as untrusted data.
+
+The frontend helper lives at
+`frontend/src/features/heat-map/excuse-api.mjs`:
+
+```js
+const result = await generateExcuse(event, "unhinged");
+```
+
+### Integration contract
+
+The calendar/UI side owns event selection and passes this shape to the helper:
+
+```js
+{
+  title: "CS midterm",
+  description: "Optional calendar description",
+  startLabel: "Tuesday at 2:00pm"
+}
+```
+
+The calendar/UI side owns event selection and event normalization. The excuse
+feature owns prompting, output validation, loading/error states, and
+display/copy behavior. The shared Gemma module owns provider transport,
+credentials, timeouts, concurrency, and provider error mapping. No frontend
+code should import or expose either API-key variable.
 
 ## Calendar engine (`backend/hellweek`)
 
@@ -339,3 +398,7 @@ Provider reference: [Run Gemma with the Gemini API](https://ai.google.dev/gemma/
 - Frontend: 2-space indent, `@/` resolves to `src/`.
 - Never commit `.env` files; examples are checked in instead.
 - API is versioned by URL prefix (`/api/v1`); breaking changes get `/api/v2`.
+
+## License
+
+This project is available under the [MIT License](LICENSE).
