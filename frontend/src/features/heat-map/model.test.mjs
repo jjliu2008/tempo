@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {dailyLoad,classify,intensity,topActivity,dayTone,loadHours} from './model.mjs';
+import {eventsFor,calendars} from './college-data.mjs';
+const high={start:8,end:10,priority:3};
+test('traffic-light day load uses exact 60% and 100% boundaries',()=>{assert.equal(dayTone(0),'chill');assert.equal(dayTone(59),'chill');assert.equal(dayTone(60),'medium');assert.equal(dayTone(99),'medium');assert.equal(dayTone(100),'hard');assert.equal(dayTone(250),'hard');assert.equal(classify([60,80,90]).label,'Heating up');});
+test('college demo covers classes, clubs, parties, and late evenings without overlaps',()=>{const events=eventsFor(0);assert.ok(events.some(e=>e.title.includes('party')&&e.end>24));assert.ok(events.some(e=>e.title.includes('club')));assert.ok(events.some(e=>e.title.includes('useless class')&&e.priority===1));for(const e of events){assert.ok(e.start>=8&&e.end<=28&&e.end>e.start);assert.ok(calendars.some(c=>c.name===e.type));}for(let day=0;day<7;day++){const list=events.filter(e=>e.day===day).sort((a,b)=>a.start-b.start);for(let i=1;i<list.length;i++)assert.ok(list[i].start>=list[i-1].end);}});
+test('daily highlights prefer importance, then duration, without mutating events',()=>{const events=[{title:'Class',start:8,end:11,priority:1},{title:'Deadline',start:12,end:13,priority:3}];assert.equal(topActivity(events).title,'Deadline');assert.equal(events[0].title,'Class');assert.equal(topActivity([]),undefined);});
+test('all modes use actual hours against a fixed six-hour reference',()=>{assert.equal(dailyLoad([high]),33);assert.equal(dailyLoad([{...high,priority:1}]),33);assert.equal(dailyLoad([high],3,100),dailyLoad([high],10,0));assert.equal(dailyLoad([{start:8,end:14}]),100);});
+test('hell week classification uses fixed load boundaries',()=>{assert.equal(classify([100,100,100,20,0,0,0]).label,'Hell week');assert.equal(classify([99,100,99,20,0,0,0]).label,'Heating up');assert.equal(classify([20,20,20]).label,'Chill week');});
+test('empty calendars produce no heat or hell days',()=>{assert.equal(intensity([],8,5,65),0);assert.equal(dailyLoad([],5,65),0);assert.equal(classify([0,0,0,0,0,0,0]).hellDays,0);});
+test('partial hours count accurately and low priority does not erase real time',()=>{assert.ok(intensity([{start:8.5,end:9,priority:2}],8)<intensity([high],8));assert.equal(intensity([{...high,priority:1}],8),4);});
+test('overlapping events do not double-count the occupied clock time',()=>{assert.equal(loadHours([{start:8,end:10},{start:9,end:11}]),3);assert.equal(dailyLoad([{start:8,end:10},{start:9,end:11}]),50);});

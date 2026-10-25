@@ -8,12 +8,14 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "node --test src/features/heat-map/*.test.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.1.0"
+    "react-router-dom": "^7.1.0",
+    "lucide-react": "^0.468.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
