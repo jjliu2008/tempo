@@ -105,10 +105,13 @@ Health check: `curl http://localhost:8000/api/v1/health`.
 directory is git-ignored, never committed, and never pushed.
 
 `make watch-graph` keeps it in step with GitHub. Every 60 seconds the watcher
-fetches `origin/main`, fast-forwards when GitHub has new commits (never rebasing
-or creating merges; git refuses if local edits would be overwritten), and runs
-`graphify update` — AST only, no LLM — when the graph has not been updated for
-`HEAD` yet. It never commits or pushes.
+fetches `origin/main` and fast-forwards only when safe; it never rebases or
+creates merges, and Git refuses an update that would overwrite local edits.
+It runs `graphify update` — AST only, no LLM — when the local graph is stale
+relative to the checked-out `HEAD`, including when Git is ahead of or diverged
+from GitHub. Divergence still needs a merge or rebase to sync Git; the watcher
+records that request while keeping the local graph current. It never commits
+or pushes.
 
 When it finds work only an agent can do — changed docs/media that need semantic
 extraction, a rebuild failure, or divergence — it writes

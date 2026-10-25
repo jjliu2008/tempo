@@ -67,6 +67,7 @@ FAILED_FILE="$STATE_DIR/failed_head"
 GRAPHIFIED_FILE="$STATE_DIR/graphified_sha"
 BRANCH_NOTICE="$STATE_DIR/branch_notice"
 REQUEST_KEY_FILE="$STATE_DIR/request.key"
+KEPT_FILE="$STATE_DIR/kept.key"
 PID_FILE="$STATE_DIR/watch.pid"
 
 # Files whose content only a semantic (LLM) pass can add to the graph.
@@ -180,7 +181,10 @@ agent_request() {
     # (failed fetch, divergence) is being reported in the log.
     if [ "$kind" = "transient" ] && [ -f "$TASK_FILE" ] &&
         grep -q '^- kind: semantic$' "$TASK_FILE"; then
-        log "note: $reason (existing semantic request kept)"
+        if [ "$(cat "$KEPT_FILE" 2>/dev/null || true)" != "$key" ]; then
+            printf '%s\n' "$key" >"$KEPT_FILE"
+            log "note: $reason (existing semantic request kept)"
+        fi
         return 0
     fi
 
@@ -242,9 +246,10 @@ rebuild_graph() {
 }
 
 FETCH_FAILURES=0
+SLEEP_PID=""
 
 tick() {
-    local current remote_sha head stamp graphified subject docs
+    local current remote_sha head stamp graphified subject docs blocked=0
 
     current="$(git -C "$REPO_DIR" symbolic-ref --quiet --short HEAD || true)"
     if [ "$current" != "$BRANCH" ]; then
@@ -295,10 +300,10 @@ tick() {
                     log "cannot fast-forward to ${remote_sha:0:8}: local changes or a checkout error blocked it; graph left alone (details in $LOG_FILE)"
                     printf '%s\n' "$remote_sha" >"$BLOCKED_FILE"
                 fi
+                blocked=1
                 agent_request transient \
                     "cannot fast-forward to ${remote_sha:0:8}" "" \
                     "Commit or stash the local changes that conflict. The next pass retries the fast-forward."
-                return 0
             fi
         elif git -C "$REPO_DIR" merge-base --is-ancestor "$remote_sha" "$head"; then
             # Local branch is ahead of GitHub; nothing new to take.
@@ -308,17 +313,17 @@ tick() {
                 log "local $BRANCH and $REMOTE/$BRANCH have diverged (${head:0:8} vs ${remote_sha:0:8}); merge or rebase to resume"
                 printf '%s\n' "$remote_sha" >"$BLOCKED_FILE"
             fi
+            blocked=1
             agent_request transient \
                 "local $BRANCH (${head:0:8}) and $REMOTE/$BRANCH (${remote_sha:0:8}) have diverged" "" \
                 "Merge or rebase $REMOTE/$BRANCH. The next pass rebuilds the graph automatically."
-            return 0
         fi
     fi
 
     stamp="$(graph_stamp)"
     graphified="$(cat "$GRAPHIFIED_FILE" 2>/dev/null || true)"
     if [ "$stamp" = "$head" ] || [ "$graphified" = "$head" ]; then
-        clear_transient_request
+        [ "$blocked" -eq 0 ] && clear_transient_request
         return 0
     fi
 
@@ -330,10 +335,10 @@ tick() {
     if rebuild_graph "$head" "$stamp"; then
         if [ -n "$docs" ]; then
             agent_request semantic \
-                "$(printf '%s\n' "$docs" | wc -l | tr -d ' ') changed documentation/media file(s) need semantic extraction" \
+                "$(printf '%s\n' "$docs" | wc -l | tr -d ' ') changed documentation/media file(s) need semantic extraction$([ "$blocked" -eq 1 ] && printf ' (git is also diverged from %s/%s)' "$REMOTE" "$BRANCH")" \
                 "$docs" \
-                "Run the graphify skill's incremental update for these files (graphify update alone only re-extracts code), then delete this file."
-        else
+                "Run the graphify skill's incremental update for these files (graphify update alone only re-extracts code), then delete this file. If git is diverged, merge or rebase $REMOTE/$BRANCH too."
+        elif [ "$blocked" -eq 0 ]; then
             clear_transient_request
         fi
     else
@@ -360,10 +365,13 @@ if [ "$ONCE" -eq 1 ]; then
     exit 1
 fi
 
-trap 'log "watcher stopped"; exit 0' INT TERM
+trap 'kill "${SLEEP_PID:-""}" 2>/dev/null || true; log "watcher stopped"; exit 0' INT TERM
 while :; do
     tick || true
     date -Iseconds >"$STATE_DIR/last_check" 2>/dev/null || true
-    sleep "$INTERVAL" &
-    wait $! || true
+    # 9>&- keeps the sleep child from inheriting (and holding) the flock.
+    sleep "$INTERVAL" 9>&- &
+    SLEEP_PID=$!
+    wait "$SLEEP_PID" || true
+    SLEEP_PID=""
 done
