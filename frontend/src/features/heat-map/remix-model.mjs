@@ -14,4 +14,4 @@ export function remixWeek(original,mode){
  for(const [day,start,end,type,title,priority] of additions){if(events.some(e=>e.day===day&&e.start<end&&e.end>start))continue;if(mode==='lazy'&&scheduledHours(events.filter(e=>e.day===day))+end-start>3)continue;const id=`${original[0]?.id||'empty'}-remix-${mode}-${day}-${start}`,event={id,day,start,end,type,title,priority,change:'added'};events.push(event);changes.push({kind:'added',id,title,day,detail:mode==='lazy'?'A little protected recovery time':mode==='extrovert'?'More time with your people':'A protected focus session'});}
  return {events:events.sort((a,b)=>a.day-b.day||a.start-b.start),changes};
 }
-export function scheduledHours(events){return events.reduce((sum,e)=>sum+e.end-e.start,0);}
+export function scheduledHours(events){return Number(events.reduce((sum,e)=>sum+e.end-e.start,0).toFixed(2));}

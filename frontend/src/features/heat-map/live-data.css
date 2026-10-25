@@ -1,0 +1,17 @@
+/* Live calendar import, loading state and the Gemma forecast in the banner. */
+.import-calendar{display:grid;gap:12px;margin:16px 0 4px;text-align:left}
+.import-tabs{display:flex;gap:6px}
+.import-tabs button{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;border:1px solid currentColor;border-radius:999px;background:transparent;opacity:.6;cursor:pointer;font:inherit;font-size:13px}
+.import-tabs button.selected{opacity:1;font-weight:700}
+.import-field{display:grid;gap:4px;font-size:13px;font-weight:600}
+.import-field input{font:inherit;font-weight:400;padding:8px 10px;border:1px solid #d8c9c3;border-radius:10px;background:#fff;min-width:0}
+.import-field small,.import-gemma small{font-weight:400;opacity:.7;font-size:12px}
+.import-range{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.import-gemma{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px}
+.import-error{margin:0;padding:8px 10px;border-radius:10px;background:#fbe4e2;color:#8a1f28;font-size:13px}
+.live-status{display:inline-flex;align-items:center;gap:6px}
+.spin{animation:hw-spin 1s linear infinite}
+@keyframes hw-spin{to{transform:rotate(360deg)}}
+.forecast-advisories{margin:8px 0 0;padding-left:18px;font-size:14px}
+.forecast-advisories li{margin:2px 0}
+.forecast-source{display:inline-block;margin-left:8px;font-size:11px;letter-spacing:.06em;opacity:.7}

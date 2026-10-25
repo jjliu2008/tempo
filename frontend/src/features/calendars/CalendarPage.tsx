@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 
 import type { CalendarProvider, ParsedEvent } from "../../api/calendars";
+import { giveHandoff } from "../heat-map/live-data.mjs";
 import AppleConnectForm from "./AppleConnectForm";
 import { useCalendars } from "./useCalendars";
 import "./calendars.css";
@@ -375,6 +376,19 @@ export default function CalendarPage() {
               {calendar.result.start} to {calendar.result.end} ·{" "}
               {calendar.result.timezone}
             </p>
+            {calendar.result.events.length > 0 && (
+              <button
+                type="button"
+                className="button primary"
+                onClick={() => {
+                  if (giveHandoff(sessionStorage, calendar.result!)) {
+                    window.location.assign("/schedule");
+                  }
+                }}
+              >
+                Find my hell weeks →
+              </button>
+            )}
           </div>
           {calendar.result.events.length === 0 ? (
             <p className="calendar-empty">

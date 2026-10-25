@@ -13,19 +13,9 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from hellweek.classify import Classification, classify_events, read_classifications
-from hellweek.detect import DEFAULT_HELL_HOURS, Detection, detect_hell_weeks
-from hellweek.gemma import (
-    API_KEY_VAR,
-    GemmaClient,
-    GemmaError,
-    configured_models,
-    find_api_key,
-    gemma_classify_events,
-    gemma_report,
-)
-from hellweek.load import DayLoad, compute_daily_load
-from hellweek.output import load_json
+from hellweek.classify import Classification, read_classifications
+from hellweek.detect import DEFAULT_HELL_HOURS
+from hellweek.gemma import API_KEY_VAR, GemmaClient, GemmaError, configured_models, find_api_key
 from hellweek.parse import (
     CalendarSourceError,
     Event,
@@ -34,7 +24,7 @@ from hellweek.parse import (
     looks_like_url,
     read_calendar,
 )
-from hellweek.report import report_facts, template_report
+from hellweek.pipeline import analysis_json, analyze, gemma_classifications, stderr_log
 
 URL_ENV_VAR = "HELLWEEK_CALENDAR_URL"
 
@@ -143,37 +133,6 @@ def gemma_client(required: bool = False) -> GemmaClient | None:
     return GemmaClient(key, models=configured_models())
 
 
-def gemma_classifications(
-    events: Sequence[Event], client: GemmaClient, cache: Path | None
-) -> dict[str, Classification]:
-    titles = len({e.title.strip() for e in events})
-    print(f"Gemma: estimating prep for {titles} unique titles...", file=sys.stderr)
-    result = gemma_classify_events(events, client, cache)
-    for error in result.errors:
-        warn(f"Gemma batch failed, those titles use keyword rules: {error}")
-    print(
-        f"Gemma: {result.from_gemma} titles from the API, {result.from_cache} cached, "
-        f"{len(result.missing_titles)} on keyword fallback",
-        file=sys.stderr,
-    )
-    return result.by_event_id
-
-
-def hell_week_reports(
-    detection: Detection,
-    days: Sequence[DayLoad],
-    events: Sequence[Event],
-    classifications: dict[str, Classification],
-    client: GemmaClient | None,
-) -> list[dict[str, Any]]:
-    reports = []
-    for week in detection.hell_weeks:
-        facts = report_facts(week, days, events, classifications, detection.median_weekly_hours)
-        written = gemma_report(facts, client) if client else None
-        reports.append(written or template_report(facts))
-    return reports
-
-
 def write_json(data: Any, out: str) -> None:
     if out == "-":
         json.dump(data, sys.stdout, indent=2)
@@ -203,17 +162,24 @@ def run(args: argparse.Namespace) -> None:
     if args.command == "events":
         write_json([e.to_dict() for e in events], args.out)
         return
-    from_gemma = gemma_classifications(events, client, args.gemma_cache) if client else {}
     if args.command == "classify":
-        write_json(classes_json(from_gemma), args.out)
+        assert client is not None
+        write_json(
+            classes_json(gemma_classifications(events, client, args.gemma_cache, stderr_log)),
+            args.out,
+        )
         return
-    # Precedence: classes.json entries, then Gemma, then keyword rules.
-    from_file = read_file_classifications(args.classifications, events)
-    classifications = classify_events(events, {**from_gemma, **from_file})
-    days = compute_daily_load(events, classifications, args.start, args.end)
-    detection = detect_hell_weeks(days, events, classifications, args.hell_hours)
-    reports = hell_week_reports(detection, days, events, classifications, client)
-    write_json(load_json(days, detection, tz_name, reports), args.out)
+    analysis = analyze(
+        events,
+        args.start,
+        args.end,
+        tz_name,
+        overrides=read_file_classifications(args.classifications, events),
+        gemma=client,
+        gemma_cache=args.gemma_cache,
+        hell_hours=args.hell_hours,
+    )
+    write_json(analysis_json(analysis), args.out)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

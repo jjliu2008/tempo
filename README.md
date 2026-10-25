@@ -186,8 +186,36 @@ code should import or expose either API-key variable.
 ## Calendar engine (`backend/hellweek`)
 
 A plain Python package that turns an `.ics` calendar into daily workload and
-flagged hell weeks. It has no web or database dependencies; a service in
-`app/services/` should call it rather than reimplement it. Run from `backend/`:
+flagged hell weeks. It has no web or database dependencies. The web app calls
+it through `app/services/analysis.py` (`hellweek.pipeline.analyze`), so the CLI
+and the API always produce the same `load.json`.
+
+**End to end:** `make dev-backend` + `make dev-frontend`, then open
+http://localhost:5173/schedule. The heat map analyzes the demo semester through
+the real pipeline (with Gemma if a key is set) and opens on its hell week. Two
+ways to use your own calendar:
+
+- On `/calendars`, connect Google or iCloud (or import a URL), parse, then
+  click **Find my hell weeks**. The parsed events (ids, titles and times only)
+  are handed to `/schedule` once through `sessionStorage` and analyzed there.
+- On `/schedule`, "Your calendars" imports an `.ics` file or secret iCal link
+  directly. This needs no database or OAuth setup.
+
+Prep hours show up on the heat map as "Prep: …" study blocks placed in free
+time, and the banner shows the hell week forecast.
+
+```
+POST /api/v1/analysis
+{"source": "demo" | "ics" | "url" | "events", "ics": "...", "url": "...",
+ "events": [{"id", "title", "start", "end", "all_day"}],
+ "start": "2026-08-25", "end": "2026-12-15", "tz": null, "gemma": true}
+```
+
+The response is `load.json` plus `events` (classified, no locations) and
+`prep_blocks`. Errors are 400 with `{"detail": {"code", "message"}}`, and never
+echo the URL. The first Gemma run on a calendar takes about 30 s.
+
+Run from `backend/`:
 
 ```bash
 python -m hellweek.make_demo --out demo/demo_semester.ics   # fictional semester
