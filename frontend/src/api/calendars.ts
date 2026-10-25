@@ -77,11 +77,13 @@ export const calendarApi = {
     provider: CalendarProvider,
     input: CalendarParseInput,
     csrf: string,
+    signal?: AbortSignal,
   ) =>
     request<ParsedCalendar>(`/calendars/${provider}/parse`, {
       ...options(csrf),
       method: "POST",
       body: JSON.stringify(input),
+      signal,
     }),
   importUrl: (input: CalendarUrlImportInput, csrf: string) =>
     request<ParsedCalendar>("/calendars/import", {

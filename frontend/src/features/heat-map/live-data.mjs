@@ -20,7 +20,15 @@ export function giveHandoff(storage,parsed){handoff=undefined;try{storage.setIte
 // Cached per page load, so React StrictMode's double effect run still sees it.
 export function takeHandoff(storage){if(handoff!==undefined)return handoff;handoff=null;try{const raw=storage.getItem(HANDOFF_KEY);storage.removeItem(HANDOFF_KEY);const value=raw&&JSON.parse(raw);if(value?.source==='events'&&Array.isArray(value.events))handoff=value;}catch{}return handoff;}
 
+// The window read from a connected calendar when nobody picked one: two weeks
+// back (so a hell week in progress is whole) and four months ahead, well under
+// the backend's 366-day cap. Local calendar dates, not UTC.
+export const CONNECTED_DAYS_BEFORE=14,CONNECTED_DAYS_AFTER=120;
+export function connectedRange(now=new Date()){const day=n=>{const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()+n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;};return {start:day(-CONNECTED_DAYS_BEFORE),end:day(CONNECTED_DAYS_AFTER)};}
+
 export const sampleSource={kind:'sample',label:'college life · demo data',timezone:'New York time',base:sampleBase,eventsFor:sampleEventsFor,reportFor:()=>null,meta:null};
+// What the page shows until real calendar data arrives: an empty week, never sample events.
+export const emptySource={kind:'empty',label:'no calendar connected',timezone:'',base:mondayOf(new Date()),eventsFor:()=>[],reportFor:()=>null,meta:null};
 
 export function priorityFor(stress){return stress>=7?3:stress>=4?2:1;}
 export function calendarFor(type){return CALENDAR_FOR_TYPE[type]||'Me time';}

@@ -228,9 +228,12 @@ it through `app/services/analysis.py` (`hellweek.pipeline.analyze`), so the CLI
 and the API always produce the same `load.json`.
 
 **End to end:** `make dev-backend` + `make dev-frontend`, then open
-http://localhost:5173/schedule. The heat map analyzes the demo semester through
-the real pipeline (with Gemma if a key is set) and opens on its hell week. Two
-ways to use your own calendar:
+http://localhost:5173/schedule. The heat map reads the calendar you connected on
+`/` (its primary calendar, 2 weeks back to 120 days ahead) and analyzes it through
+the real pipeline (with Gemma if a key is set), opening on its hell week. With
+nothing connected it shows an empty week; `/schedule?sample` loads the demo
+semester on purpose. The backend reads `backend/.env` at startup, so restart it
+after adding `GOOGLE_API_KEY`. Other ways to use your own calendar:
 
 - On `/calendars`, connect Google or iCloud (or import a URL), parse, then
   click **Find my hell weeks**. The parsed events (ids, titles and times only)
@@ -468,9 +471,8 @@ Provider reference: [Run Gemma with the Gemini API](https://ai.google.dev/gemma/
 
 The homepage (`/`) is a simple sign-in screen. Google is the primary action,
 with Apple Calendar and link-import alternatives. Connected sessions continue
-to `/calendars`; the existing sample heat-map is preserved at `/schedule`.
-Imported events appear on `/calendars` and in its API response, not as fake
-live data in the sample schedule.
+to `/calendars`. `/schedule` shows the connected calendar's events, and only
+loads sample data when asked with `?sample`.
 
 Both providers and URL imports use the existing `hellweek.parse.expand_events`
 parser. Imports are read-only and on demand, not background or two-way sync.
