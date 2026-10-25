@@ -1,0 +1,6 @@
+"""Alembic environment placeholder.
+
+When you adopt Alembic, run `alembic init alembic` inside `backend/`, then point
+`target_metadata` at `app.db.base.Base.metadata` and import every module in
+`app/models/` so autogenerate can see the tables.
+"""
