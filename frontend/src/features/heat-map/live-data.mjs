@@ -35,8 +35,10 @@ export function calendarFor(type){return CALENDAR_FOR_TYPE[type]||'Me time';}
 export function parseDate(iso){const [y,m,d]=iso.slice(0,10).split('-').map(Number);return new Date(y,m-1,d);}
 export function mondayOf(date){const monday=new Date(date);monday.setDate(monday.getDate()-((monday.getDay()+6)%7));return monday;}
 export function daysBetween(a,b){return Math.round((b-a)/DAY_MS);}
+// Which week (0 = the one starting at `base`, negative = earlier) holds the ISO date `iso`.
+export function weekIndexFor(base,iso){return Math.floor(daysBetween(base,parseDate(iso))/7);}
 const addDays=(date,n)=>{const d=new Date(date);d.setDate(d.getDate()+n);return d;};
-const isoDate=date=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+export const isoDate=date=>`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
 // Wall-clock time in the calendar's own timezone, read straight from the ISO string.
 const clockHours=iso=>Number(iso.slice(11,13))+Number(iso.slice(14,16))/60;
 
