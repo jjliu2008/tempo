@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {terrainSample,terrainColor,projectPoint,worldPoint,defaultCamera,dayKindHours,barycentric} from './terrain-model.mjs';
+import {eventsFor} from './college-data.mjs';
+import {remixWeek} from './personality-model.mjs';
+import {pickTerrain} from './terrain-renderer.mjs';
+test('low terrain is green and high terrain is red',()=>{const low=terrainColor({height:.1}),high=terrainColor({height:3.6});assert.ok(low[1]>low[0]);assert.ok(high[0]>high[1]);});
+test('fun alone stays low green while prolonged work accumulates high red stress',()=>{for(const type of ['Campus life','Me time']){const fun=terrainSample([{day:0,start:18,end:27,type}],.5,22),color=terrainColor(fun);assert.ok(fun.height<.1);assert.ok(color[1]>color[0]);}const work=terrainSample([{day:0,start:8,end:14,type:'Classes'}],.5,13),color=terrainColor(work);assert.ok(work.height>2);assert.ok(color[0]>color[1]);});
+test('long plans produce taller peaks and empty slots become valleys',()=>{const short=terrainSample([{day:0,start:10,end:11,type:'Classes'}],.5,10.5),long=terrainSample([{day:0,start:10,end:16,type:'Classes'}],.5,13);assert.ok(long.height>short.height);assert.ok(terrainSample([],3.5,18).height<short.height);});
+test('soft life reduces work peaks rather than renormalizing the terrain',()=>{const original=eventsFor(0),soft=remixWeek(original,{effort:'lazy',social:'introvert'}).events;assert.ok(terrainSample(original,.5,8.5).height>terrainSample(soft,.5,8.5).height);});
+test('stress is the vertical Z axis and rotation keeps coordinates finite',()=>{const point=worldPoint(5,20,2),a=projectPoint(point,defaultCamera),b=projectPoint(point,{...defaultCamera,yaw:defaultCamera.yaw+1});assert.equal(point.z,2);assert.notEqual(a.x,b.x);for(const n of Object.values(a))assert.ok(Number.isFinite(n));});
+test('only Work and Fun remain, including downtime under Fun',()=>{assert.deepEqual(dayKindHours([{day:0,type:'Classes',start:10,end:12},{day:0,type:'Campus life',start:18,end:20},{day:0,type:'Me time',start:21,end:22}],0),{work:2,fun:3});assert.ok(barycentric({x:.2,y:.2},{x:0,y:0},{x:1,y:0},{x:0,y:1}));assert.equal(barycentric({x:2,y:2},{x:0,y:0},{x:1,y:0},{x:0,y:1}),null);});
+test('terrain inspection retains quarter-hour timing for stress recovery',()=>{const scene={markers:[],triangles:[{points:[{x:0,y:0,day:.5,hour:16.25},{x:1,y:0,day:.5,hour:16.25},{x:0,y:1,day:.5,hour:16.25}]}]};assert.equal(pickTerrain(scene,.2,.2).hour,16.25);});
