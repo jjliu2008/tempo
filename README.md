@@ -58,8 +58,9 @@ Rules that keep the layers honest:
 
 - **Backend.** Endpoints parse input and call a service; they never query the
   database directly. Services hold business rules and never build HTTP
-  responses. Repositories own SQL. `models/` is the database shape, `schemas/`
-  is the wire shape — do not return ORM objects from endpoints.
+  responses. Provider-specific services own upstream SDK calls; orchestration
+  services compose them. Repositories own SQL. `models/` is the database shape,
+  `schemas/` is the wire shape — do not return ORM objects from endpoints.
 - **Frontend.** Components render. Data fetching lives in hooks inside the
   feature slice. Only `src/api/` talks to `fetch`. Shared building blocks move
   to `components/`; anything used by one feature stays in that feature.
@@ -146,6 +147,130 @@ calendar. Never log it, print it, put it in a URL query string or commit it.
 - School Google accounts (MSU and others) sometimes have the secret address
   turned off by the admin. If it isn't shown, use a personal account, or export
   the calendar to `.ics` and pass the file.
+
+## Shared Gemma API
+
+The backend uses Google's official `google-genai` SDK and one async client per
+application process. Set `GOOGLE_API_KEY` in `backend/.env` (or `GEMINI_API_KEY`),
+then restart the backend. Get a key from [Google AI Studio](https://aistudio.google.com/apikey).
+Never put the key in a `VITE_` variable or frontend code.
+
+`GEMMA_MODEL` defaults to `gemma-4-26b-a4b-it`; `gemma-4-31b-it` is also supported.
+Both support native system instructions through Google's Gemini API.
+`backend/.env.example` lists output-token, timeout, temperature, and concurrency
+settings. The app and health endpoint still start without a key; Gemma requests
+then return `503`.
+
+### Call from any frontend feature
+
+```ts
+import { gemma } from "@/api/gemma";
+
+const first = await gemma.generate({
+  system_prompt: "You are the app's planning assistant. Use the supplied data.",
+  context: { project: { name: "Launch", tasks: ["Review", "Ship"] } },
+  prompt: "What should we do first?",
+});
+
+const next = await gemma.generate({
+  system_prompt: "You are the app's planning assistant. Use the supplied data.",
+  history: first.history,
+  prompt: "Break that step into smaller tasks.",
+});
+```
+
+Both client methods accept an optional `AbortSignal` as their second argument.
+They call `POST /api/v1/gemma/generate` and `POST /api/v1/gemma/agents`;
+the complete request and response schemas are available at `/docs`.
+
+### Call from backend modules
+
+Inject the shared service into endpoints, then pass it to services/workers that
+need inference; do not create a Google client for every call:
+
+```python
+from typing import Annotated
+
+from fastapi import Depends
+
+from app.api.deps import get_gemma_service
+from app.schemas.gemma import GemmaRequest
+from app.services.gemma import GemmaService
+
+async def plan(gemma: Annotated[GemmaService, Depends(get_gemma_service)]):
+    return await gemma.generate(
+        GemmaRequest(
+            system_prompt="You are a planning assistant.",
+            context={"tasks": ["Review", "Ship"]},
+            prompt="Which task comes first?",
+        )
+    )
+```
+
+A standalone worker can own a `GemmaService(settings)` instance and must call
+`await service.aclose()` on shutdown. FastAPI manages that lifecycle automatically.
+
+### Context and conversation ownership
+
+- `context` accepts text, a JSON object, or a JSON array. Pass the relevant
+  application state, records, documents, and permissions-filtered data explicitly.
+  The module does not automatically read the database, filesystem, or other users'
+  conversations.
+- Every successful response includes `text`, `model`, `history`, `finish_reason`,
+  and Google's token `usage`. Pass `history` into the next request to continue;
+  it preserves each turn's context as well as user/model messages. System prompts
+  apply per request and must be supplied again on follow-ups.
+- All supplied history and context are sent without silent truncation or
+  summarization. Google's input/context limits still apply. A `MAX_TOKENS`
+  finish reason signals a potentially incomplete answer.
+- Histories are caller-owned, not globally stored. Save them in the appropriate
+  user/session state if persistence is needed, and clear them when switching users.
+  Clients control supplied history/context; neither is an authorization boundary.
+
+### Multiple agents
+
+```ts
+const run = await gemma.runAgents({
+  system_prompt: "Use the supplied context. Be concise.",
+  context: { project: "Launch", deadline: "Friday" },
+  agents: [
+    { id: "planner", system_prompt: "Create a plan.", prompt: "Plan the launch." },
+    { id: "risk", system_prompt: "Identify risks.", prompt: "List launch risks." },
+    {
+      id: "reviewer",
+      system_prompt: "Review the planner and risk outputs.",
+      prompt: "Produce a final recommendation.",
+      depends_on: ["planner", "risk"],
+    },
+  ],
+});
+```
+
+Independent agents run concurrently, bounded by the shared
+`GEMMA_MAX_CONCURRENT_REQUESTS` limit per process. Agents with `depends_on` wait
+for those agents and receive their full output text under
+`context.agent_results[id]`, alongside `shared_context` and their own
+`agent_context`. Each agent can also supply its own history, temperature, and
+output-token limit. Results preserve input order, not completion order.
+Unrelated agents do not receive each other's private context/history. A graph
+supports up to 16 agents; duplicate ids, missing dependencies, and cycles are
+rejected before execution. If an agent fails, unfinished sibling tasks are
+cancelled; Google may still charge for provider calls already in progress.
+
+### Errors and deployment
+
+Validation errors return `422`. Service errors have
+`{"detail": {"code": "gemma_...", "message": "..."}}`:
+missing configuration `503`, invalid/provider-rejected input `400`, quota `429`,
+timeout `504`, blocked answer `422`, or upstream failure `502`. Provider error
+bodies, credentials, and model thinking are not returned as answers.
+
+This scaffold has **no authentication**. Protect these endpoints with your
+application's authentication/authorization and quota policy before public
+deployment; CORS alone does not prevent API use. Only send data to Google that
+your application is authorized to disclose.
+
+Provider reference: [Run Gemma with the Gemini API](https://ai.google.dev/gemma/docs/core/gemma_on_gemini_api).
 
 ## Conventions
 
