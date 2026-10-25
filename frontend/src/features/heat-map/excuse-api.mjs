@@ -22,7 +22,6 @@ export async function generateExcuse(event, vibe = 'casual', extraContext = '') 
       extra_user_direction: extraContext.trim() || null,
     },
     temperature: 0.9,
-    max_output_tokens: 220,
   });
 
   // Models occasionally wrap JSON in a Markdown fence despite instructions.
