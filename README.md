@@ -99,6 +99,28 @@ the real API origin and enable CORS for it in `backend/.env`
 
 Health check: `curl http://localhost:8000/api/v1/health`.
 
+## Local code graph (graphify)
+
+`graphify-out/` holds a knowledge graph of this repo. It is **local only**: the
+directory is git-ignored, never committed, and never pushed.
+
+`make watch-graph` keeps it in step with GitHub. Every 60 seconds the watcher
+fetches `origin/main`, fast-forwards when GitHub has new commits (never rebasing
+or creating merges; git refuses if local edits would be overwritten), and runs
+`graphify update` — AST only, no LLM — when the graph has not been updated for
+`HEAD` yet. It never commits or pushes.
+
+When it finds work only an agent can do — changed docs/media that need semantic
+extraction, a rebuild failure, or divergence — it writes
+`graphify-out/.graphify_watch/agent-task.md` with the reason, files, and a
+suggested command, and logs `agent action requested`. An agent working in this
+checkout reads that file, updates the graph locally, then deletes it. Logs and
+state sit beside it in `graphify-out/.graphify_watch/`.
+
+`make watch-graph-once` runs one check. Stop a background watcher with
+`kill "$(cat graphify-out/.graphify_watch/watch.pid)"`. `INTERVAL`, `REMOTE`,
+`BRANCH`, `REPO_DIR`, and `GRAPHIFY_BIN` are environment overrides.
+
 ## Calendar engine (`backend/hellweek`)
 
 A plain Python package that turns an `.ics` calendar into daily workload and
