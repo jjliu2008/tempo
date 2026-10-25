@@ -1,0 +1,164 @@
+/*
+ * Tempo motion layer. Additive only: no existing rule or component is edited,
+ * so it merges cleanly beside other people's work. Remove the import in
+ * src/App.tsx to turn it all off.
+ *
+ * Frequency gate: page load and modals are occasional, so they animate.
+ * Cell hover and selection are frequent, so they stay fast and subtle.
+ * Transform/opacity only (translate/scale properties), named transitions only.
+ */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Feedback: pressable things confirm the press. :active is real on touch. */
+.button,
+.nav,
+.icon-button,
+.compare-button,
+.plan-tabs button,
+.calendar-focus-toggle,
+.calendar-toggle,
+.back-original,
+.social-style,
+.interest,
+.month-cell,
+.day-highlight {
+  transition:
+    scale 160ms var(--ease-out),
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.button:active,
+.nav:active,
+.icon-button:active,
+.compare-button:active,
+.plan-tabs button:active,
+.calendar-focus-toggle:active,
+.back-original:active,
+.social-style:active,
+.interest:active,
+.month-cell:active,
+.day-highlight:active {
+  scale: 0.97;
+}
+
+/* Heat cells are hit constantly: keep them quick, and hover only where hover exists. */
+.heat-cell {
+  transition:
+    filter 120ms var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+
+@media (hover: none) {
+  .heat-cell:hover {
+    transform: none;
+    filter: none;
+    outline: none;
+  }
+}
+
+/* State indication: the bar chart eases to new values instead of snapping. */
+.bar {
+  transition: height 250ms var(--ease-out);
+}
+
+/* Preventing a jarring change: content that appears gets a short entrance. */
+@keyframes tempo-rise {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@keyframes tempo-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.week-banner,
+.stat,
+.heatmap,
+.bottom-grid > * {
+  animation: tempo-rise 300ms var(--ease-out) backwards;
+}
+
+.stat:nth-child(2) { animation-delay: 50ms; }
+.stat:nth-child(3) { animation-delay: 100ms; }
+.heatmap { animation-delay: 150ms; }
+.bottom-grid > :nth-child(2) { animation-delay: 50ms; }
+
+/* Panels opened by a toggle: transitions retarget if the user flips it twice. */
+.plan-comparison,
+.event-detail {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity 180ms var(--ease-out),
+    translate 180ms var(--ease-out);
+
+  @starting-style {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+
+/* Modal stays centered (not anchored to a trigger); backdrop fades with it. */
+.modal-backdrop {
+  opacity: 1;
+  transition: opacity 250ms var(--ease-out);
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+.modal {
+  opacity: 1;
+  scale: 1;
+  transition:
+    opacity 250ms var(--ease-out),
+    scale 250ms var(--ease-out);
+
+  @starting-style {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+
+/* Reduced motion: keep the fades that aid comprehension, drop movement. */
+@media (prefers-reduced-motion: reduce) {
+  .week-banner,
+  .stat,
+  .heatmap,
+  .bottom-grid > * {
+    animation-name: tempo-fade;
+    animation-duration: 200ms;
+    animation-delay: 0ms;
+  }
+
+  .plan-comparison,
+  .event-detail,
+  .modal {
+    translate: none;
+    scale: none;
+    transition: opacity 150ms ease !important;
+  }
+
+  .button:active,
+  .nav:active,
+  .icon-button:active,
+  .compare-button:active,
+  .plan-tabs button:active,
+  .calendar-focus-toggle:active,
+  .back-original:active,
+  .social-style:active,
+  .interest:active,
+  .month-cell:active,
+  .day-highlight:active {
+    scale: none;
+  }
+}
