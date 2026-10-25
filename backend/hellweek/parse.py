@@ -6,7 +6,7 @@ import urllib.request
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, time, timedelta
 from pathlib import Path
-from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import icalendar
 import recurring_ical_events  # type: ignore[import-untyped]
@@ -126,6 +126,21 @@ def expand_events(cal: icalendar.Calendar, start: date, end: date, tz: ZoneInfo)
         if event is not None:
             events.setdefault(event.id, event)
     return sorted(events.values(), key=lambda e: (e.start, e.id))
+
+
+def calendar_timezone(cal: icalendar.Calendar) -> str | None:
+    """The calendar's own zone (X-WR-TIMEZONE, else its first VTIMEZONE), if it is
+    a valid IANA name. Outlook-style names like "Eastern Standard Time" are not."""
+    names = [cal.get("X-WR-TIMEZONE")] + [vtz.get("TZID") for vtz in cal.walk("VTIMEZONE")]
+    for name in names:
+        if not name:
+            continue
+        try:
+            ZoneInfo(str(name))
+        except (ZoneInfoNotFoundError, ValueError):
+            continue
+        return str(name)
+    return None
 
 
 def parse_calendar(source: str | Path, start: date, end: date, tz_name: str) -> list[Event]:

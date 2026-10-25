@@ -105,10 +105,24 @@ flagged hell weeks. It has no web or database dependencies; a service in
 `app/services/` should call it rather than reimplement it. Run from `backend/`:
 
 ```bash
+python -m hellweek.make_demo --out demo/demo_semester.ics   # fictional semester
 python -m hellweek events CAL.ics --start 2026-08-25 --end 2026-12-15 --out events.json
 python -m hellweek analyze CAL.ics --start 2026-08-25 --end 2026-12-15 \
-    [--classifications classes.json] [--tz America/New_York] --out load.json
+    [--classifications classes.json] [--tz America/New_York] [--hell-hours 50] --out load.json
 ```
+
+`CAL.ics` may also be an http(s) or `webcal://` URL. `--tz` defaults to the
+calendar's own timezone, then UTC; `--out` defaults to stdout. Warnings
+(malformed or unmatched `classes.json` entries) go to stderr.
+
+- `events.json`: list of `{id, title, start, end, all_day, duration_hours,
+  location, description}`. The model returns `classes.json` keyed by `id`:
+  `{"<id>": {"type": "exam|deadline|quiz|class|meeting|social|work|other",
+  "prep_hours": 8.0, "stress": 7}}`. Events it omits use keyword rules.
+- `load.json`: `meta` (range, timezone, threshold), `days` (every day, with a
+  per-event `breakdown`), and `hell_weeks` ranked worst first. Each hell week
+  has its merged span (`start`/`end`/`total_hours`), its heaviest 7-day window
+  (`peak_start`/`peak_end`/`peak_hours`) and its stress >= 7 `key_events`.
 
 Its tests live in `backend/tests/hellweek/` and run with `make test-backend`.
 

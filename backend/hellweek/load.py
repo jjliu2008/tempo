@@ -29,11 +29,11 @@ class DayLoad:
 
     @property
     def scheduled_hours(self) -> float:
-        return sum(b.hours for b in self.breakdown if b.kind == "scheduled")
+        return sum((b.hours for b in self.breakdown if b.kind == "scheduled"), 0.0)
 
     @property
     def prep_hours(self) -> float:
-        return sum(b.hours for b in self.breakdown if b.kind == "prep")
+        return sum((b.hours for b in self.breakdown if b.kind == "prep"), 0.0)
 
     @property
     def total_hours(self) -> float:
