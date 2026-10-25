@@ -78,7 +78,7 @@ def elapsed_hours(start: datetime, end: datetime) -> float:
     """Real elapsed hours. Subtracting two datetimes that share a ZoneInfo ignores
     DST offsets, so compare in UTC instead."""
     delta = end.astimezone(UTC) - start.astimezone(UTC)
-    return round(delta.total_seconds() / 3600, 4)
+    return delta.total_seconds() / 3600
 
 
 def occurrence_id(uid: str, start: datetime, all_day: bool) -> str:
