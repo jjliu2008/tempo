@@ -1,0 +1,7 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {eventsFor} from './college-data.mjs';
+import {moodTimeline,moodColor,moodLabel} from './mood-model.mjs';
+test('the student day moves from good through drained and back to good',()=>{const points=moodTimeline(eventsFor(0),{style:'extrovert',likes:['parties','clubs','friends']})[0];assert.ok(points[1].score>=65);assert.ok(points.some(p=>p.hour>=14&&p.hour<=16&&p.score<40));assert.ok(points.find(p=>p.hour===21).score>=65);});
+test('social energy changes the simulated effect of parties',()=>{const events=[{day:4,start:21,end:24,title:'House party',type:'Campus life',priority:1}];const intro=moodTimeline(events,{style:'introvert',likes:[]})[4],extro=moodTimeline(events,{style:'extrovert',likes:['parties']})[4];assert.ok(intro[15].score<extro[15].score);assert.equal(extro[15].events[0].title,'House party');});
+test('the field has seven days, twenty hours, and bounded interpolated colors',()=>{const timeline=moodTimeline(eventsFor(0));assert.equal(timeline.length,7);for(const day of timeline){assert.equal(day.length,20);for(const point of day){assert.ok(point.score>=0&&point.score<=100);assert.equal(moodColor(point.score).length,3);for(const component of moodColor(point.score))assert.ok(component>=0&&component<=255);}}assert.equal(moodLabel(80),'Feeling good');assert.equal(moodLabel(50),'Mixed energy');assert.equal(moodLabel(20),'Feeling drained');});
