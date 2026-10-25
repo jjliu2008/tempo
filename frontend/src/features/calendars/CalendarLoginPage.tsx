@@ -112,8 +112,8 @@ export default function CalendarLoginPage() {
             connection credentials are encrypted on the server.
           </span>
         </p>
-        <a className="calendar-login-demo" href="/schedule?sample">
-          Explore the sample schedule
+        <a className="calendar-login-demo" href="/schedule?demo">
+          Use the demo account
         </a>
       </section>
     </main>

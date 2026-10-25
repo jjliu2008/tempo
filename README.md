@@ -231,8 +231,11 @@ and the API always produce the same `load.json`.
 http://localhost:5173/schedule. The heat map reads the calendar you connected on
 `/` (its primary calendar, 2 weeks back to 120 days ahead) and analyzes it through
 the real pipeline (with Gemma if a key is set), opening on its hell week. With
-nothing connected it shows an empty week; `/schedule?sample` loads the demo
-semester on purpose. The backend reads `backend/.env` at startup, so restart it
+nothing connected it shows an empty week. The login page's **Use the demo
+account** opens `/schedule?demo`: the fictional demo semester through the same
+pipeline (`/schedule?sample` is the offline static copy). For slides,
+`python -m hellweek.export_sheet --out-dir demo` (from `backend/`) writes
+`demo/demo_events.csv`, `demo_daily_load.csv` and `demo_hell_weeks.csv`. The backend reads `backend/.env` at startup, so restart it
 after adding `GOOGLE_API_KEY`. Other ways to use your own calendar:
 
 - On `/calendars`, connect Google or iCloud (or import a URL), parse, then

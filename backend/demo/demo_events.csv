@@ -1,0 +1,195 @@
+date,weekday,start,end,hours,title,type,prep_hours,stress
+2026-08-25,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-08-25,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-08-26,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-08-26,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-08-26,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-08-27,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-08-27,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-08-28,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-08-28,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-08-28,Fri,17:00,20:00,3.0,Welcome week BBQ,other,0.0,1
+2026-08-29,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-08-31,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-08-31,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-01,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-09-01,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-09-02,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-02,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-02,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-09-03,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-09-03,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-09-04,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-04,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-05,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-09-08,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-09-08,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-09-09,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-09,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-09,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-09-09,Wed,20:00,20:30,0.5,CHEM 210 Quiz 1,quiz,2.0,4
+2026-09-10,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-09-10,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-09-11,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-11,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-12,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-09-12,Sat,19:00,22:00,3.0,Home football game,other,0.0,1
+2026-09-14,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-14,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-15,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-09-15,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-09-16,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-16,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-16,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-09-16,Wed,20:00,20:30,0.5,MATH 241 Quiz 1,quiz,2.0,4
+2026-09-17,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-09-17,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-09-18,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-18,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-19,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-09-19,Sat,20:00,23:00,3.0,Movie night with roommates,other,0.0,1
+2026-09-21,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-21,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-22,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-09-22,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-09-23,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-23,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-23,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-09-24,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-09-24,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-09-25,Fri,all day,,0.0,HIST 105 essay due,deadline,6.0,7
+2026-09-25,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-25,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-26,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-09-28,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-28,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-29,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-09-29,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-09-30,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-09-30,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-09-30,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-10-01,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-10-01,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-10-01,Thu,20:00,20:30,0.5,CS 220 Quiz 1,quiz,2.0,4
+2026-10-02,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-02,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-03,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-10-04,Sun,08:00,14:00,6.0,Hiking trip,other,0.0,1
+2026-10-05,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-05,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-06,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-10-06,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-10-07,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-07,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-07,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-10-07,Wed,20:00,20:30,0.5,CHEM 210 Quiz 2,quiz,2.0,4
+2026-10-08,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-10-08,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-10-09,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-09,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-10,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-10-14,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-14,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-14,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-10-15,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-10-15,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-10-16,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-16,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-17,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-10-17,Sat,18:30,21:30,3.0,Sam's birthday dinner,other,0.0,1
+2026-10-19,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-19,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-19,Mon,18:00,20:00,2.0,CHEM 210 review session (TA),other,0.0,1
+2026-10-19,Mon,20:00,20:30,0.5,CS 220 Quiz 2,quiz,2.0,4
+2026-10-19,Mon,20:30,22:00,1.5,CS 220 team sync,other,0.0,1
+2026-10-20,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-10-20,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-10-20,Tue,19:00,21:00,2.0,CHEM 210 Midterm 1,exam,10.0,9
+2026-10-21,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-21,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-21,Wed,16:00,18:00,2.0,MATH 241 Midterm,exam,10.0,9
+2026-10-21,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-10-22,Thu,all day,,0.0,CS 220 Project 2 due,deadline,6.0,7
+2026-10-22,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-10-22,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-10-23,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-23,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-24,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-10-26,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-26,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-27,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-10-27,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-10-28,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-28,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-28,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-10-29,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-10-29,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-10-30,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-10-30,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-10-31,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-10-31,Sat,21:00,23:59,2.98,Halloween party,other,0.0,1
+2026-11-02,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-11-02,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-11-03,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-11-03,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-11-04,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-11-04,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-11-04,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-11-05,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-11-05,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-11-06,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-11-06,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-11-07,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-11-07,Sat,15:00,18:00,3.0,Away game watch party,other,0.0,1
+2026-11-09,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-11-09,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-11-10,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-11-10,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-11-11,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-11-11,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-11-11,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-11-11,Wed,20:00,20:30,0.5,MATH 241 Quiz 2,quiz,2.0,4
+2026-11-12,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-11-12,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-11-13,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-11-13,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-11-14,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-11-16,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-11-16,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-11-17,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-11-17,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-11-18,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-11-18,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-11-18,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-11-19,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-11-19,Thu,14:00,15:15,1.25,HIST 105 Midterm,exam,10.0,9
+2026-11-19,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-11-20,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-11-20,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-11-21,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-11-23,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-11-23,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-11-24,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-11-24,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-11-26,Thu,all day,,0.0,Thanksgiving at home,other,0.0,1
+2026-11-30,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-11-30,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-12-01,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-12-01,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-12-02,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-12-02,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-12-02,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
+2026-12-02,Wed,20:00,20:30,0.5,CHEM 210 Quiz 3,quiz,2.0,4
+2026-12-03,Thu,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-12-03,Thu,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-12-04,Fri,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-12-04,Fri,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-12-05,Sat,10:00,17:00,7.0,Campus cafe shift,other,0.0,1
+2026-12-05,Sat,19:30,21:30,2.0,Winter concert,other,0.0,1
+2026-12-07,Mon,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-12-07,Mon,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-12-08,Tue,10:00,11:15,1.25,CS 220 Data Structures,other,0.0,1
+2026-12-08,Tue,14:00,15:15,1.25,HIST 105 Modern World,other,0.0,1
+2026-12-09,Wed,09:00,09:50,0.83,CHEM 210 Organic Chemistry,other,0.0,1
+2026-12-09,Wed,11:00,11:50,0.83,MATH 241 Linear Algebra,other,0.0,1
+2026-12-09,Wed,19:00,20:30,1.5,Robotics Club meeting,other,0.0,1
