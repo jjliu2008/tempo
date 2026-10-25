@@ -1,15 +1,16 @@
 """Parse an .ics calendar into a flat list of timezone-aware event occurrences."""
+
 from __future__ import annotations
 
 import urllib.request
 from dataclasses import dataclass
-from datetime import date, datetime, time, timedelta, timezone
+from datetime import UTC, date, datetime, time, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import icalendar
-import recurring_ical_events
-import x_wr_timezone
+import recurring_ical_events  # type: ignore[import-untyped]
+import x_wr_timezone  # type: ignore[import-untyped]
 
 DEFAULT_DURATION = timedelta(hours=1)
 
@@ -25,7 +26,7 @@ class Event:
     location: str
     description: str
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, str | bool | float]:
         return {
             "id": self.id,
             "title": self.title,
@@ -42,7 +43,7 @@ def read_calendar(source: str | Path) -> icalendar.Calendar:
     """Load a calendar from a file path or an http(s)/webcal URL."""
     text = str(source)
     if text.startswith(("http://", "https://", "webcal://")):
-        url = "https://" + text[len("webcal://"):] if text.startswith("webcal://") else text
+        url = "https://" + text[len("webcal://") :] if text.startswith("webcal://") else text
         with urllib.request.urlopen(url, timeout=30) as resp:
             data = resp.read()
     else:
@@ -76,14 +77,14 @@ def to_local(value: date | datetime, tz: ZoneInfo) -> datetime:
 def elapsed_hours(start: datetime, end: datetime) -> float:
     """Real elapsed hours. Subtracting two datetimes that share a ZoneInfo ignores
     DST offsets, so compare in UTC instead."""
-    delta = end.astimezone(timezone.utc) - start.astimezone(timezone.utc)
+    delta = end.astimezone(UTC) - start.astimezone(UTC)
     return round(delta.total_seconds() / 3600, 4)
 
 
 def occurrence_id(uid: str, start: datetime, all_day: bool) -> str:
     """Stable id per occurrence. Timed starts are keyed in UTC so the id doesn't
     change when --tz does (classes.json must still match)."""
-    start_iso = start.date().isoformat() if all_day else start.astimezone(timezone.utc).isoformat()
+    start_iso = start.date().isoformat() if all_day else start.astimezone(UTC).isoformat()
     return f"{uid}_{start_iso}"
 
 
@@ -97,7 +98,7 @@ def to_event(comp: icalendar.Event, tz: ZoneInfo) -> Event | None:
     if "DTEND" in comp:
         end = to_local(comp.decoded("DTEND"), tz)
     elif "DURATION" in comp:
-        end = (start.astimezone(timezone.utc) + comp.decoded("DURATION")).astimezone(tz)
+        end = (start.astimezone(UTC) + comp.decoded("DURATION")).astimezone(tz)
     else:
         end = start + (timedelta(days=1) if all_day else DEFAULT_DURATION)
     title = str(comp.get("SUMMARY", "")).strip() or "(untitled)"

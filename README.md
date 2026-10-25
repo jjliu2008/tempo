@@ -20,6 +20,7 @@ independent deployables that share only an HTTP contract.
 │   │   ├── repositories/    Data access queries
 │   │   ├── db/              Base metadata, engine, session factory
 │   │   └── workers/         Background jobs / task queue
+│   ├── hellweek/            Calendar parsing + load math (pure, no FastAPI)
 │   ├── alembic/             Migrations
 │   ├── tests/               Mirrors app/ layout
 │   ├── pyproject.toml
@@ -96,6 +97,20 @@ the real API origin and enable CORS for it in `backend/.env`
 (`CORS_ORIGINS`).
 
 Health check: `curl http://localhost:8000/api/v1/health`.
+
+## Calendar engine (`backend/hellweek`)
+
+A plain Python package that turns an `.ics` calendar into daily workload and
+flagged hell weeks. It has no web or database dependencies; a service in
+`app/services/` should call it rather than reimplement it. Run from `backend/`:
+
+```bash
+python -m hellweek events CAL.ics --start 2026-08-25 --end 2026-12-15 --out events.json
+python -m hellweek analyze CAL.ics --start 2026-08-25 --end 2026-12-15 \
+    [--classifications classes.json] [--tz America/New_York] --out load.json
+```
+
+Its tests live in `backend/tests/hellweek/` and run with `make test-backend`.
 
 ## Conventions
 
