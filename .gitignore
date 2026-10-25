@@ -36,3 +36,5 @@ events.json
 
 # Graphify's knowledge graph is rebuilt locally; nothing here is committed or pushed.
 graphify-out/
+
+.gemma_cache.json

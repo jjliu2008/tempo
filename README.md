@@ -149,6 +149,42 @@ calendar's own timezone, then UTC; `--out` defaults to stdout. Warnings
 
 Its tests live in `backend/tests/hellweek/` and run with `make test-backend`.
 
+### Gemma (prep estimates and the forecast)
+
+Gemma does only the two jobs that need judgment or writing. Our code does all
+the parsing, prep spreading, load math and detection, so the numbers stay
+consistent and explainable.
+
+1. **Hidden prep:** for each unique event title, Gemma returns type,
+   prep_hours and stress (e.g. "CSE 232 Midterm 2" → exam, 10h, stress 9).
+2. **Weather report:** for each hell week, Gemma writes a headline, a funny
+   forecast and specific advice. It sees only facts our code computed (dates,
+   events, hours, prep start days). The result goes in
+   `hell_weeks[i].report` as `{headline, forecast, advisories, source}`.
+
+```bash
+python -m hellweek analyze CAL.ics --start ... --end ... --gemma --out load.json
+python -m hellweek classify CAL.ics --start ... --end ... --out classes.json
+```
+
+- Uses the same key as the [Shared Gemma API](#shared-gemma-api):
+  `GOOGLE_API_KEY` or `GEMINI_API_KEY` in `backend/.env` (gitignored). The key
+  travels in a request header and is never printed. That API is the generic
+  transport; the prompts, validation and fallbacks for these two jobs live here.
+- Gemma is opt-in (`--gemma`). Without it, or if the API fails after retries,
+  you get the keyword rules and a template report (`"source": "template"`).
+- Only titles are sent: no locations, descriptions or calendar URL. Titles are
+  deduplicated, so a class that repeats 40 times is sent once.
+- Replies are validated. A malformed entry falls back to keywords for that
+  title only. Rate limits and "high demand" errors are retried with backoff,
+  then `gemma-4-26b-a4b-it` falls back to `gemma-4-31b-it`. Set
+  `HELLWEEK_GEMMA_MODEL` to force one model.
+- Results are cached per title in `.gemma_cache.json` (gitignored), so re-runs
+  skip the roughly 30 s classification call.
+- Gemma is open-weight, so the model can be swapped, self-hosted later, or
+  fine-tuned on real student workload data. **With the API, event titles do
+  leave your machine (they go to Google)**, so don't claim otherwise.
+
 ### Importing from a calendar URL
 
 Google: Settings → your calendar → Integrate calendar → **Secret address in

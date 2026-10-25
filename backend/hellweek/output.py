@@ -56,7 +56,16 @@ def hell_week_json(week: HellWeek) -> dict[str, Any]:
     }
 
 
-def load_json(days: Sequence[DayLoad], detection: Detection, tz: str) -> dict[str, Any]:
+def load_json(
+    days: Sequence[DayLoad],
+    detection: Detection,
+    tz: str,
+    reports: Sequence[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """`reports` lines up with detection.hell_weeks; each one lands under "report"."""
+    hell_weeks = [hell_week_json(h) for h in detection.hell_weeks]
+    for week, report in zip(hell_weeks, reports or [], strict=False):
+        week["report"] = report
     return {
         "meta": {
             "start": days[0].date.isoformat() if days else None,
@@ -66,5 +75,5 @@ def load_json(days: Sequence[DayLoad], detection: Detection, tz: str) -> dict[st
             "median_weekly_hours": round(detection.median_weekly_hours, ROUND),
         },
         "days": [day_json(d) for d in days],
-        "hell_weeks": [hell_week_json(h) for h in detection.hell_weeks],
+        "hell_weeks": hell_weeks,
     }
