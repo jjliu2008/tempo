@@ -37,6 +37,12 @@ class Settings(BaseSettings):
     GEMMA_TIMEOUT_SECONDS: float = Field(default=60, gt=0, allow_inf_nan=False)
     GEMMA_MAX_CONCURRENT_REQUESTS: int = Field(default=4, ge=1)
 
+    GOOGLE_CALENDAR_CLIENT_ID: str = ""
+    GOOGLE_CALENDAR_CLIENT_SECRET: SecretStr | None = None
+    GOOGLE_CALENDAR_REDIRECT_URI: str = "http://localhost:5173/api/v1/calendars/google/callback"
+    CALENDAR_FRONTEND_URL: str = "http://localhost:5173"
+    CALENDAR_ENCRYPTION_KEY: SecretStr | None = None
+
 
 @lru_cache
 def get_settings() -> Settings:

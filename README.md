@@ -186,8 +186,36 @@ code should import or expose either API-key variable.
 ## Calendar engine (`backend/hellweek`)
 
 A plain Python package that turns an `.ics` calendar into daily workload and
-flagged hell weeks. It has no web or database dependencies; a service in
-`app/services/` should call it rather than reimplement it. Run from `backend/`:
+flagged hell weeks. It has no web or database dependencies. The web app calls
+it through `app/services/analysis.py` (`hellweek.pipeline.analyze`), so the CLI
+and the API always produce the same `load.json`.
+
+**End to end:** `make dev-backend` + `make dev-frontend`, then open
+http://localhost:5173/schedule. The heat map analyzes the demo semester through
+the real pipeline (with Gemma if a key is set) and opens on its hell week. Two
+ways to use your own calendar:
+
+- On `/calendars`, connect Google or iCloud (or import a URL), parse, then
+  click **Find my hell weeks**. The parsed events (ids, titles and times only)
+  are handed to `/schedule` once through `sessionStorage` and analyzed there.
+- On `/schedule`, "Your calendars" imports an `.ics` file or secret iCal link
+  directly. This needs no database or OAuth setup.
+
+Prep hours show up on the heat map as "Prep: …" study blocks placed in free
+time, and the banner shows the hell week forecast.
+
+```
+POST /api/v1/analysis
+{"source": "demo" | "ics" | "url" | "events", "ics": "...", "url": "...",
+ "events": [{"id", "title", "start", "end", "all_day"}],
+ "start": "2026-08-25", "end": "2026-12-15", "tz": null, "gemma": true}
+```
+
+The response is `load.json` plus `events` (classified, no locations) and
+`prep_blocks`. Errors are 400 with `{"detail": {"code", "message"}}`, and never
+echo the URL. The first Gemma run on a calendar takes about 30 s.
+
+Run from `backend/`:
 
 ```bash
 python -m hellweek.make_demo --out demo/demo_semester.ics   # fictional semester
@@ -398,6 +426,136 @@ Provider reference: [Run Gemma with the Gemini API](https://ai.google.dev/gemma/
 - Frontend: 2-space indent, `@/` resolves to `src/`.
 - Never commit `.env` files; examples are checked in instead.
 - API is versioned by URL prefix (`/api/v1`); breaking changes get `/api/v2`.
+
+## Calendar sign-in and imports
+
+The homepage (`/`) is a simple sign-in screen. Google is the primary action,
+with Apple Calendar and link-import alternatives. Connected sessions continue
+to `/calendars`; the existing sample heat-map is preserved at `/schedule`.
+Imported events appear on `/calendars` and in its API response, not as fake
+live data in the sample schedule.
+
+Both providers and URL imports use the existing `hellweek.parse.expand_events`
+parser. Imports are read-only and on demand, not background or two-way sync.
+
+### Server configuration
+
+Set these in `backend/.env`; never put them in `VITE_` variables:
+
+```dotenv
+# Keep the existing PostgreSQL URL, or use SQLite locally:
+DATABASE_URL=sqlite+aiosqlite:///./calendars.db
+CALENDAR_ENCRYPTION_KEY=<generated-Fernet-key>
+CALENDAR_FRONTEND_URL=http://localhost:5173
+GOOGLE_CALENDAR_CLIENT_ID=<web-application-client-id>
+GOOGLE_CALENDAR_CLIENT_SECRET=<web-application-client-secret>
+GOOGLE_CALENDAR_REDIRECT_URI=http://localhost:5173/api/v1/calendars/google/callback
+```
+
+Generate the encryption key with:
+
+```bash
+backend/.venv/bin/python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+```
+
+Keep the encryption key stable and secret across workers/restarts. It encrypts
+stored OAuth tokens, Apple app-specific passwords, and pending OAuth verifiers;
+losing/replacing it requires reconnecting accounts. Link imports need the
+database and encryption key for their browser-owned session, but do **not**
+need Google OAuth credentials.
+
+Calendar tables are created lazily on first use. Before running multiple
+backend workers, initialize them once from `backend/`:
+
+```bash
+.venv/bin/python -m app.db.init_calendars
+```
+
+Use a shared database and encryption key across workers. In production, set
+`ENVIRONMENT=production`, use HTTPS, and serve the frontend and API on the same
+site. Production uses a Secure `__Host-` HttpOnly cookie; development supports
+localhost HTTP. Sessions last 30 days and belong to that browser. This
+connection ownership does not replace application-wide user authentication.
+
+### Google Calendar
+
+Enable the **Google Calendar API** in your Google Cloud project, configure the
+OAuth consent screen (including test users in testing mode), and create a
+**Web application** OAuth client. Register the exact redirect URI above, save
+the client ID/secret in `backend/.env`, and restart the backend. A Google
+AI/Gemma API key cannot replace these OAuth credentials.
+
+**Sign in with Google** requests `openid`, `email`, and `calendar.readonly`,
+with PKCE and browser-bound, one-use state. Success returns to `/calendars`;
+cancellation returns to sign-in. Tokens are stored encrypted and refreshed
+when possible; revoked/expired grants require reconnecting. Testing-mode
+Google consent grants may expire sooner than production grants.
+See [Google's server-side OAuth guide](https://developers.google.com/identity/protocols/oauth2/web-server).
+
+### Apple Calendar
+
+Use your Apple Account email and an
+[app-specific password](https://support.apple.com/en-us/102654), with
+two-factor authentication enabled. The normal Apple Account password is not
+accepted. The backend performs read-only iCloud CalDAV discovery and queries;
+credentials never go into frontend storage or URL parameters.
+
+This connects calendars synced to **iCloud**, not device-only calendars.
+A Google calendar displayed in Apple's Calendar app should use the Google
+connection instead.
+
+### Google, ICS, and webcal links
+
+Choose **Import a Google or ICS link instead**, or **Paste a calendar URL**.
+Supported inputs:
+
+- Google share links (`?cid=...`) and embed links (`?src=...`). A matching
+  connected account reads its available private calendar; otherwise the app
+  tries that calendar's published public ICS feed.
+- Direct Google public or secret/private `.ics` feed URLs.
+- Public HTTP/HTTPS ICS feeds, with or without a `.ics` filename.
+- `webcal://` feeds, fetched over HTTPS.
+
+Google event-edit links and sign-in pages are not calendar feeds. Private
+Google calendars need the matching connection; do not make them public just
+to import them. A secret ICS URL is a credential: use HTTPS and do not share
+it. Imported URLs and parsed events are not stored in the database or sent
+to Gemma.
+
+Feed downloads use validated public IPs pinned to the actual connection.
+Redirects are revalidated; private networks, embedded URL credentials, and
+HTTPS downgrades are rejected. Downloads time out after 30 seconds and are
+limited to 5 MiB transferred and decompressed. Gzip/deflate are supported.
+Failures are explicit rather than silently truncating results.
+
+Select an inclusive date range of at most 366 days and an IANA timezone.
+Connected-account imports support up to 20 selected calendars. Parsed events
+include calendar/source identity, namespaced occurrence IDs, title, start/end,
+all-day status, elapsed hours, location, and description. Google expands its
+recurring instances; Apple/ICS recurrence rules, exclusions, and overrides
+go through the shared parser.
+
+### API and connection ownership
+
+The shared frontend client is `frontend/src/api/calendars.ts`. Paths below
+are relative to `/api/v1/calendars`. `GET /session` sets an opaque HttpOnly
+cookie and returns the CSRF token used in `X-CSRF-Token` on every mutation.
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| GET | `/session` | Session, connection status, and CSRF token |
+| POST | `/google/authorize` | Begin Google OAuth |
+| GET | `/google/callback` | Consume browser-bound OAuth state |
+| POST | `/apple/connect` | Verify and store an iCloud connection |
+| GET | `/{provider}/calendars` | List readable calendars |
+| POST | `/{provider}/parse` | Fetch selected calendars and run the parser |
+| POST | `/import` | Fetch a pasted Google/ICS link and run the parser |
+| DELETE | `/{provider}` | Remove this browser's saved connection |
+
+Disconnect deletes the local encrypted credentials. Revoke the Google grant
+or Apple app-specific password separately in the provider's account settings
+when needed. The backend redacts OAuth callback query strings from its access
+logger; configure reverse proxies not to log those query strings either.
 
 ## License
 

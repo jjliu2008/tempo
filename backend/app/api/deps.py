@@ -8,6 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import async_session_factory
 from app.services.agent_orchestrator import AgentOrchestrator
+from app.services.calendar import CalendarService
+from app.services.calendar_errors import CalendarError
 from app.services.gemma import GemmaError, GemmaService
 
 
@@ -27,6 +29,13 @@ def get_agent_orchestrator(
     gemma: Annotated[GemmaService, Depends(get_gemma_service)],
 ) -> AgentOrchestrator:
     return AgentOrchestrator(gemma)
+
+
+def get_calendar_service(request: Request) -> CalendarService:
+    service = getattr(request.app.state, "calendars", None)
+    if not isinstance(service, CalendarService):
+        raise CalendarError("not_configured", "Calendar connections are unavailable.")
+    return service
 
 
 # Add auth dependencies here, e.g.:
