@@ -8,3 +8,5 @@
 .verdict{font-size:10px;letter-spacing:.8px;padding:2px 6px;border-radius:4px;margin-right:4px;font-weight:700}.verdict-skip{background:#e8e0dc;color:#5b4a43}.verdict-go{background:#ffe6a8;color:#6b4e00}.verdict-lock{background:#b72b39;color:#fff1e5}
 .cell-verdict{display:inline-block!important;font-size:7px!important;letter-spacing:.7px;padding:2px 3px;border-radius:3px;line-height:1;margin-bottom:3px;font-weight:700}
 .heat-cell .cell-verdict.verdict-skip{background:#ffffffb0;color:#5b4a43}.heat-cell .cell-verdict.verdict-lock{background:#ffffffe0;color:#a91f35}
+
+.axis-footnote{flex-wrap:wrap;gap:10px}.remix-apply{display:inline-flex;align-items:center;gap:6px;margin-left:auto;padding:9px 16px;border-radius:6px;background:#a82338;color:#fff2e9;font-size:13px;font-weight:600;transition:scale 160ms cubic-bezier(.23,1,.32,1),background-color 150ms ease}.remix-apply:active:not(:disabled){scale:.97}.remix-apply:disabled{background:#e9cdbb;color:#a67f6b;cursor:default}@media(prefers-reduced-motion:reduce){.remix-apply:active:not(:disabled){scale:none}}
