@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {eventsFor} from './college-data.mjs';
+import {remixWeek,scheduledHours} from './remix-model.mjs';
+import {dailyLoad,dayTone} from './model.mjs';
+test('all remixes preserve high importance commitments and avoid overlaps',()=>{const original=eventsFor(0),snapshot=JSON.stringify(original);for(const recipe of ['lazy','extrovert','grind']){const result=remixWeek(original,recipe);for(const e of original.filter(e=>e.priority===3))assert.ok(result.events.some(r=>r.id===e.id));for(let day=0;day<7;day++){const events=result.events.filter(e=>e.day===day).sort((a,b)=>a.start-b.start);for(let i=1;i<events.length;i++)assert.ok(events[i].start>=events[i-1].end,recipe);}assert.ok(result.changes.length>0);}assert.equal(JSON.stringify(original),snapshot);});
+test('lazy mode removes optional classes and reduces scheduled time',()=>{const original=eventsFor(0),result=remixWeek(original,'lazy');assert.ok(result.changes.some(c=>c.kind==='removed'&&c.title.includes('useless class')));assert.ok(result.events.some(e=>e.title==='Do nothing. On purpose.'));assert.ok(scheduledHours(result.events)<scheduledHours(original));});
+test('extrovert adds social plans and changes solo study',()=>{const result=remixWeek(eventsFor(0),'extrovert');assert.ok(result.events.some(e=>e.title==='Dinner with new people'&&e.change==='added'));assert.ok(result.events.some(e=>e.title==='Study group + coffee'));assert.ok(result.events.some(e=>e.title==='House party'&&e.priority===3));});
+test('original is a stable, reversible view',()=>{const original=eventsFor(0);assert.deepEqual(remixWeek(original,null).events,original);assert.deepEqual(remixWeek(original,null).changes,[]);});
+test('soft life is genuinely green on six days and preserves a protected busy day',()=>{const original=eventsFor(0),soft=remixWeek(original,'lazy').events;const tones=Array.from({length:7},(_,day)=>dayTone(dailyLoad(soft.filter(e=>e.day===day))));assert.equal(tones.filter(t=>t==='chill').length,6);assert.equal(tones.filter(t=>t==='hard').length,0);assert.equal(tones[1],'medium');assert.equal(scheduledHours(soft),19.5);});
